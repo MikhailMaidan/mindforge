@@ -16,16 +16,23 @@ const openMainMenu = () => {
 
 <template>
   <section class="actions">
-    <BaseButton @click="openWarmUp">Warm Up</BaseButton>
-    <BaseButton>Detailed Statistics</BaseButton>
-    <BaseButton @click="openMainMenu">Main Menu</BaseButton>
+    <BaseButton fullWidth @click="openWarmUp">Warm Up</BaseButton>
+    <BaseButton fullWidth>Detailed Statistics</BaseButton>
+    <BaseButton fullWidth @click="openMainMenu">Main Menu</BaseButton>
   </section>
 </template>
 
 <style scoped>
 .actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  flex-wrap: wrap;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .actions {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

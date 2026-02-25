@@ -6,6 +6,10 @@ import type { SessionHistoryItem } from '~shared/types/session'
 defineProps<{
   history: SessionHistoryItem[]
 }>()
+
+const emit = defineEmits<{
+  customize: []
+}>()
 </script>
 
 <template>
@@ -15,7 +19,7 @@ defineProps<{
       <p>Sharpen your mind and focus through mental calculation exercises</p>
     </header>
     <div class="content">
-      <TrainingConfigurator />
+      <TrainingConfigurator @customize="emit('customize')" />
       <SessionHistoryList title="Your History" :items="history" />
     </div>
   </section>

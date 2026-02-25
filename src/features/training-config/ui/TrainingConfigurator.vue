@@ -6,6 +6,10 @@ const checklist = [
   'Choose the number of exercises',
   'Choose the arithmetical operations',
 ]
+
+const emit = defineEmits<{
+  customize: []
+}>()
 </script>
 
 <template>
@@ -17,8 +21,8 @@ const checklist = [
       </li>
     </ol>
     <div class="actions">
-      <BaseButton variant="danger">Quick Trainings</BaseButton>
-      <BaseButton>Customize &gt;</BaseButton>
+      <BaseButton>Quick Trainings</BaseButton>
+      <BaseButton @click="emit('customize')">Customize &gt;</BaseButton>
     </div>
   </section>
 </template>

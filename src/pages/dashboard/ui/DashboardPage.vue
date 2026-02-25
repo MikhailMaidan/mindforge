@@ -1,9 +1,17 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { mockSessionHistory, mockSessionStats } from '~entities/session'
 import { LastSessionStatsWidget } from '~widgets/last-session'
+import { QuickTrainingChallengeWidget } from '~widgets/quick-training-challenge'
 import { SidebarWidget } from '~widgets/sidebar'
 import { TopActionsWidget } from '~widgets/top-actions'
 import { TrainingOverviewWidget } from '~widgets/training-overview'
+
+const showQuickTrainingOptions = ref(false)
+
+const openCustomizePanel = () => {
+  showQuickTrainingOptions.value = true
+}
 </script>
 
 <template>
@@ -11,8 +19,13 @@ import { TrainingOverviewWidget } from '~widgets/training-overview'
     <SidebarWidget />
     <section class="content">
       <TopActionsWidget />
-      <TrainingOverviewWidget :history="mockSessionHistory" />
-      <LastSessionStatsWidget title="Statistics of last session" :stats="mockSessionStats" />
+      <TrainingOverviewWidget :history="mockSessionHistory" @customize="openCustomizePanel" />
+      <QuickTrainingChallengeWidget v-if="showQuickTrainingOptions" />
+      <LastSessionStatsWidget
+        v-else
+        title="Statistics of last session"
+        :stats="mockSessionStats"
+      />
     </section>
   </main>
 </template>
