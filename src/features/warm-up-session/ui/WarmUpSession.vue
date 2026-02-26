@@ -24,7 +24,7 @@ const {
   totalTasks,
 } = useWarmUpSession()
 
-const TASK_PRESETS = [10, 20, 30, 40]
+const TASK_PRESETS = [5, 10, 15, 20, 25, 30]
 const operationOptions = [
   { id: '+', label: 'Addition' },
   { id: '-', label: 'Subtraction' },
@@ -45,6 +45,8 @@ const setupState = reactive({
 })
 
 const inputRef = ref<HTMLInputElement | null>(null)
+const taskMinRange = 1
+const taskMaxRange = 100
 const minRange = 1
 const maxRange = 10000
 
@@ -56,15 +58,21 @@ const selectedOperations = computed(() =>
 
 const canStartSession = computed(() => selectedOperations.value.length > 0)
 
+const totalSelectedTasks = computed(() =>
+  Math.min(taskMaxRange, Math.max(taskMinRange, Math.floor(setupState.totalTasks))),
+)
+
 const minSliderPercent = computed(() => ((setupState.minNumber - minRange) * 100) / (maxRange - minRange))
 const maxSliderPercent = computed(() => ((setupState.maxNumber - minRange) * 100) / (maxRange - minRange))
 
-const progressPreviewCount = computed(() => Math.min(setupState.totalTasks, 20))
+const progressPreviewCount = computed(() => totalSelectedTasks.value)
+const progressPreviewRows = computed(() => Math.ceil(progressPreviewCount.value / 10))
 const progressPreviewGridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${progressPreviewCount.value}, minmax(0, 1fr))`,
+  gridTemplateColumns: 'repeat(10, minmax(0, 1fr))',
+  gridTemplateRows: `repeat(${progressPreviewRows.value}, minmax(0, 1fr))`,
 }))
 const progressGridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${Math.min(totalTasks.value, 20)}, minmax(0, 1fr))`,
+  gridTemplateColumns: `repeat(${totalTasks.value}, minmax(0, 1fr))`,
 }))
 
 watch(
@@ -88,6 +96,12 @@ const onMinNumberInput = (event: Event) => {
   setupState.minNumber = Math.min(value, setupState.maxNumber)
 }
 
+const onTaskCountInput = (event: Event) => {
+  const value = Number((event.target as HTMLInputElement).value)
+  if (!Number.isFinite(value)) return
+  setupState.totalTasks = Math.min(taskMaxRange, Math.max(taskMinRange, Math.floor(value)))
+}
+
 const onMaxNumberInput = (event: Event) => {
   const value = Number((event.target as HTMLInputElement).value)
   setupState.maxNumber = Math.max(value, setupState.minNumber)
@@ -101,7 +115,7 @@ const launchSession = () => {
   if (!canStartSession.value) return
 
   startSession({
-    totalTasks: setupState.totalTasks,
+    totalTasks: totalSelectedTasks.value,
     enabledOperations: selectedOperations.value,
     minNumber: setupState.minNumber,
     maxNumber: setupState.maxNumber,
@@ -120,27 +134,43 @@ const launchSession = () => {
       </header>
 
       <div class="mt-4 grid gap-4 lg:grid-cols-[1.3fr_1fr]">
-        <div class="rounded-xl border border-slate-300 bg-slate-50 p-4">
+        <div class="flex h-full flex-col rounded-xl border border-slate-300 bg-slate-50 p-4">
           <p class="m-0 text-lg font-semibold text-slate-900 md:text-xl">Choose the number of exercises</p>
-          <div class="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4">
+          <div class="mt-3 grid grid-cols-2 gap-2 md:grid-cols-3">
             <button
               v-for="preset in TASK_PRESETS"
               :key="preset"
-              class="rounded-lg border px-3 py-2 text-base font-semibold"
-              :class="setupState.totalTasks === preset ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 bg-white text-slate-900'"
+              class="min-h-12 rounded-lg border px-3 py-3 text-base font-semibold"
+              :class="
+                totalSelectedTasks === preset
+                  ? 'border-blue-600 bg-blue-600 text-white'
+                  : 'border-slate-300 bg-white text-slate-900'
+              "
               type="button"
               @click="setupState.totalTasks = preset"
             >
               {{ preset }} tasks
             </button>
           </div>
+          <label class="mt-3 block text-base font-medium text-slate-700 md:text-lg" for="custom-task-count">
+            Custom number of tasks (1-100)
+          </label>
+          <input
+            id="custom-task-count"
+            class="mt-2 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base font-medium text-slate-900 outline-none ring-0 transition focus:border-blue-600"
+            type="number"
+            :min="taskMinRange"
+            :max="taskMaxRange"
+            :value="totalSelectedTasks"
+            @input="onTaskCountInput"
+          />
 
           <p class="mb-0 mt-4 text-lg font-semibold text-slate-900 md:text-xl">Choose the arithmetical operations</p>
-          <div class="mt-2 grid grid-cols-1 gap-2 md:grid-cols-2">
+          <div class="mt-2 grid flex-1 auto-rows-fr grid-cols-1 gap-2 md:grid-cols-2">
             <button
               v-for="option in operationOptions"
               :key="option.id"
-              class="rounded-lg border px-3 py-2 text-left text-base font-medium"
+              class="h-full min-h-12 rounded-lg border px-3 py-3 text-left text-lg font-medium"
               :class="setupState.operations[option.id] ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-300 bg-white text-slate-500'"
               type="button"
               @click="toggleOperation(option.id)"
@@ -151,20 +181,19 @@ const launchSession = () => {
           <p v-if="!canStartSession" class="mb-0 mt-2 text-sm text-red-600">Select at least one operation.</p>
         </div>
 
-        <div class="rounded-xl border border-slate-300 bg-slate-50 p-4">
+        <div class="flex h-full flex-col rounded-xl border border-slate-300 bg-slate-50 p-4">
           <p class="m-0 text-lg font-semibold text-slate-900 md:text-xl">
             Numbers range: <span class="text-blue-700">{{ setupState.minNumber }} - {{ setupState.maxNumber }}</span>
           </p>
           <div class="mt-4">
-            <div class="relative h-2 rounded bg-slate-300">
+            <div class="relative h-7">
+              <div class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 rounded bg-slate-300" />
               <div
-                class="absolute h-2 rounded bg-blue-600"
+                class="absolute top-1/2 h-2 -translate-y-1/2 rounded bg-blue-600"
                 :style="{ left: `${minSliderPercent}%`, width: `${maxSliderPercent - minSliderPercent}%` }"
               />
-            </div>
-            <div class="relative mt-[-8px] h-6">
               <input
-                class="range-thumb absolute h-6 w-full appearance-none bg-transparent"
+                class="range-thumb absolute left-0 top-0 h-7 w-full appearance-none bg-transparent"
                 type="range"
                 :min="minRange"
                 :max="maxRange"
@@ -172,8 +201,26 @@ const launchSession = () => {
                 @input="onMinNumberInput"
               />
               <input
-                class="range-thumb absolute h-6 w-full appearance-none bg-transparent"
+                class="range-thumb absolute left-0 top-0 h-7 w-full appearance-none bg-transparent"
                 type="range"
+                :min="minRange"
+                :max="maxRange"
+                :value="setupState.maxNumber"
+                @input="onMaxNumberInput"
+              />
+            </div>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <input
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base font-medium text-slate-900 outline-none ring-0 transition focus:border-blue-600"
+                type="number"
+                :min="minRange"
+                :max="maxRange"
+                :value="setupState.minNumber"
+                @input="onMinNumberInput"
+              />
+              <input
+                class="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-base font-medium text-slate-900 outline-none ring-0 transition focus:border-blue-600"
+                type="number"
                 :min="minRange"
                 :max="maxRange"
                 :value="setupState.maxNumber"
@@ -183,11 +230,15 @@ const launchSession = () => {
           </div>
 
           <p class="mb-0 mt-5 text-lg font-semibold text-slate-900 md:text-xl">
-            Predefined tasks: <span class="text-blue-700">{{ setupState.totalTasks }}</span>
+            Predefined tasks: <span class="text-blue-700">{{ totalSelectedTasks }}</span>
           </p>
-          <div class="mt-2 rounded-md border border-slate-300 bg-white p-2">
-            <div class="grid gap-1.5" :style="progressPreviewGridStyle">
-              <span v-for="index in progressPreviewCount" :key="index" class="h-2 rounded bg-blue-300" />
+          <div class="mt-2 flex-1 rounded-md border border-slate-300 bg-white p-2">
+            <div class="grid h-full gap-1.5" :style="progressPreviewGridStyle">
+              <span
+                v-for="index in progressPreviewCount"
+                :key="index"
+                class="h-full min-h-2 w-full rounded-sm bg-blue-300"
+              />
             </div>
           </div>
         </div>
@@ -269,11 +320,11 @@ const launchSession = () => {
         <p class="m-0 text-center text-xl font-bold text-slate-50 md:text-2xl">
           {{ Math.min(currentTaskIndex + 1, totalTasks) }} of {{ totalTasks }}
         </p>
-        <div class="mt-2 grid gap-1.5" :style="progressGridStyle">
+        <div class="mt-2 grid gap-1" :style="progressGridStyle">
           <span
-            v-for="(result, index) in results.slice(0, Math.min(totalTasks, 20))"
+            v-for="(result, index) in results"
             :key="index"
-            :class="['h-6 rounded-md', progressClass(result)]"
+            :class="['h-6 rounded-sm', progressClass(result)]"
           />
         </div>
       </footer>
@@ -282,6 +333,10 @@ const launchSession = () => {
 </template>
 
 <style scoped>
+.range-thumb {
+  pointer-events: none;
+}
+
 .range-thumb::-webkit-slider-thumb {
   -webkit-appearance: none;
   pointer-events: auto;
@@ -291,6 +346,7 @@ const launchSession = () => {
   border: 2px solid #2563eb;
   background: #ffffff;
   cursor: pointer;
+  margin-top: -7px;
 }
 
 .range-thumb::-moz-range-thumb {

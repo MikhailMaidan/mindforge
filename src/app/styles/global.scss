@@ -5,10 +5,17 @@
   html,
   body,
   #app {
-    @apply h-full;
+    height: 100%;
   }
 
   body {
-    @apply m-0 min-w-[320px] overflow-hidden bg-gradient-to-b from-slate-50 to-indigo-50 font-sans text-slate-900 antialiased;
+    margin: 0;
+    min-width: 320px;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #f8fafc, #e0e7ff);
+    font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
