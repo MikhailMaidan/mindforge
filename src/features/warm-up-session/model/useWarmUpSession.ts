@@ -29,7 +29,7 @@ const levelRange = (level: number): { min: number; max: number } => {
 const buildTask = (level: number): WarmUpTask => {
   const { min, max } = levelRange(level)
   const operationPool: Operation[] = ['+', '-', '*', '/']
-  const operation = operationPool[randomInt(0, operationPool.length - 1)]
+  const operation = operationPool[randomInt(0, operationPool.length - 1)] ?? '+'
 
   if (operation === '+') {
     const left = randomInt(min, max)
