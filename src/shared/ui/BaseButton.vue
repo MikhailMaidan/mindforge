@@ -1,5 +1,7 @@
 <script setup lang="ts">
-withDefaults(
+import { computed } from 'vue'
+
+const props = withDefaults(
   defineProps<{
     variant?: 'primary' | 'danger'
     fullWidth?: boolean
@@ -9,34 +11,23 @@ withDefaults(
     fullWidth: false,
   },
 )
+
+const buttonClass = computed(() => {
+  const variantClass =
+    props.variant === 'danger'
+      ? 'bg-red-500 focus:ring-red-400'
+      : 'bg-blue-600 focus:ring-blue-500'
+
+  return [
+    'inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-md transition hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-offset-2',
+    variantClass,
+    props.fullWidth ? 'w-full' : '',
+  ]
+})
 </script>
 
 <template>
-  <button :class="['btn', `btn-${variant}`, { 'btn-full': fullWidth }]">
+  <button :class="buttonClass">
     <slot />
   </button>
 </template>
-
-<style scoped>
-.btn {
-  border: 0;
-  border-radius: 14px;
-  padding: 10px 20px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  color: #fff;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 0.2);
-}
-
-.btn-primary {
-  background: #2563eb;
-}
-
-.btn-danger {
-  background: #ef4444;
-}
-
-.btn-full {
-  width: 100%;
-}
-</style>

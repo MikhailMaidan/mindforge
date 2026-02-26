@@ -25,173 +25,55 @@ const difficulty = ref(55)
 </script>
 
 <template>
-  <section class="challenge">
-    <header class="challenge-header">
-      <h3>Quick Training Challenge</h3>
-      <a href="#">View All &gt;</a>
+  <section class="rounded-xl border border-slate-400 bg-slate-100 p-4">
+    <header class="mb-5 flex items-end justify-between gap-3 border-b border-slate-400">
+      <h3 class="mb-2 text-3xl font-extrabold text-slate-900 md:text-5xl">Quick Training Challenge</h3>
+      <a class="mb-2 text-xl font-bold text-blue-600 no-underline md:text-3xl" href="#">View All &gt;</a>
     </header>
 
-    <div class="challenge-layout">
+    <div class="grid gap-8 xl:grid-cols-[2.2fr_1fr]">
       <div>
-        <p class="difficulty">
+        <p class="m-0 text-xl text-slate-800 md:text-3xl">
           Difficulty Level:
-          <span>Intermediate (numbers from 100 to 300)</span>
+          <span class="text-blue-600">Intermediate (numbers from 100 to 300)</span>
         </p>
-        <input v-model="difficulty" class="slider" type="range" min="0" max="100" />
+        <input
+          v-model="difficulty"
+          class="mt-3 w-full accent-blue-600"
+          type="range"
+          min="0"
+          max="100"
+        />
 
-        <p class="subtitle">Choose the arithmetical operations:</p>
-        <div class="options-grid">
+        <p class="mb-3 mt-5 text-xl text-slate-800 md:text-3xl">Choose the arithmetical operations:</p>
+        <div class="grid grid-cols-1 gap-x-6 gap-y-2 md:grid-cols-2">
           <button
             v-for="option in options"
             :key="option.id"
-            class="option"
+            class="flex items-center gap-2.5 bg-transparent p-0 text-left text-xl text-slate-900 md:text-3xl"
             type="button"
             @click="option.enabled = !option.enabled"
           >
-            <span :class="['marker', option.enabled ? 'marker-on' : 'marker-off']">
-              {{ option.enabled ? '✓' : '✕' }}
+            <span
+              :class="[
+                'inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold text-white',
+                option.enabled ? 'bg-blue-600' : 'bg-red-600',
+              ]"
+            >
+              {{ option.enabled ? 'OK' : 'X' }}
             </span>
             {{ option.label }}
           </button>
         </div>
       </div>
 
-      <aside class="coefficient">
-        <p>Difficulty Coefficient:</p>
-        <div class="value">68,9</div>
-        <BaseButton fullWidth>Start Session</BaseButton>
+      <aside class="grid content-start justify-items-center gap-3">
+        <p class="m-0 text-center text-xl text-blue-600 md:text-3xl">Difficulty Coefficient:</p>
+        <div class="grid h-[120px] w-[120px] place-items-center rounded-full bg-blue-600 text-5xl font-bold text-white">
+          68,9
+        </div>
+        <BaseButton full-width>Start Session</BaseButton>
       </aside>
     </div>
   </section>
 </template>
-
-<style scoped>
-.challenge {
-  border: 1px solid #9ca3af;
-  border-radius: 14px;
-  background: #f3f4f6;
-  padding: 18px;
-}
-
-.challenge-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-bottom: 1px solid #9ca3af;
-  margin-bottom: 20px;
-}
-
-.challenge-header h3 {
-  margin: 0 0 10px;
-  font-size: 4.4rem;
-}
-
-.challenge-header a {
-  color: #2563eb;
-  text-decoration: none;
-  font-size: 2.3rem;
-  font-weight: 700;
-}
-
-.challenge-layout {
-  display: grid;
-  grid-template-columns: 2.2fr 1fr;
-  gap: 30px;
-}
-
-.difficulty {
-  margin: 0;
-  font-size: 2.1rem;
-}
-
-.difficulty span {
-  color: #2563eb;
-}
-
-.slider {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.subtitle {
-  margin: 18px 0 10px;
-  font-size: 2rem;
-}
-
-.options-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 26px;
-}
-
-.option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 0;
-  background: transparent;
-  padding: 0;
-  font-size: 2rem;
-  text-align: left;
-  cursor: pointer;
-  color: #111827;
-}
-
-.marker {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
-.marker-on {
-  background: #2563eb;
-}
-
-.marker-off {
-  background: #dc2626;
-}
-
-.coefficient {
-  display: grid;
-  align-content: start;
-  justify-items: center;
-  gap: 14px;
-}
-
-.coefficient p {
-  margin: 0;
-  font-size: 2.1rem;
-  color: #2563eb;
-}
-
-.value {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #2563eb;
-  color: #fff;
-  font-size: 3.8rem;
-  font-weight: 700;
-}
-
-@media (max-width: 1050px) {
-  .challenge-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 760px) {
-  .options-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

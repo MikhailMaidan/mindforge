@@ -1,0 +1,8 @@
+@use 'sass:meta';
+@include meta.load-css('tailwindcss');
+
+@layer base {
+  body {
+    @apply m-0 min-w-[320px] bg-gradient-to-b from-slate-50 to-indigo-50 font-sans text-slate-900 antialiased;
+  }
+}

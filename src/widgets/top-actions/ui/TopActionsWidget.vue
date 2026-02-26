@@ -15,24 +15,9 @@ const openMainMenu = () => {
 </script>
 
 <template>
-  <section class="actions">
-    <BaseButton fullWidth @click="openWarmUp">Warm Up</BaseButton>
-    <BaseButton fullWidth>Detailed Statistics</BaseButton>
-    <BaseButton fullWidth @click="openMainMenu">Main Menu</BaseButton>
+  <section class="grid w-full grid-cols-1 gap-4 md:grid-cols-3">
+    <BaseButton full-width @click="openWarmUp">Warm Up</BaseButton>
+    <BaseButton full-width>Detailed Statistics</BaseButton>
+    <BaseButton full-width @click="openMainMenu">Main Menu</BaseButton>
   </section>
 </template>
-
-<style scoped>
-.actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  width: 100%;
-}
-
-@media (max-width: 900px) {
-  .actions {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

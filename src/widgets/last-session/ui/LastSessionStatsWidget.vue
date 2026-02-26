@@ -9,13 +9,13 @@ defineProps<{
 </script>
 
 <template>
-  <section class="stats">
-    <header class="stats-header">
-      <h3>{{ title }}</h3>
-      <a href="#">View All &gt;</a>
+  <section class="rounded-xl border border-slate-400 bg-slate-100 p-4">
+    <header class="mb-5 flex items-end justify-between gap-3 border-b border-slate-400">
+      <h3 class="mb-2 text-3xl font-extrabold text-slate-900 md:text-5xl">{{ title }}</h3>
+      <a class="mb-2 text-xl font-bold text-blue-600 no-underline md:text-3xl" href="#">View All &gt;</a>
     </header>
 
-    <div class="stats-grid">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
       <ProgressDonut
         v-for="item in stats"
         :key="item.id"
@@ -26,45 +26,3 @@ defineProps<{
     </div>
   </section>
 </template>
-
-<style scoped>
-.stats {
-  border: 1px solid #9ca3af;
-  border-radius: 14px;
-  background: #f3f4f6;
-  padding: 18px;
-}
-
-.stats-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border-bottom: 1px solid #9ca3af;
-  margin-bottom: 20px;
-}
-
-.stats-header h3 {
-  margin: 0 0 10px;
-  font-size: 4.4rem;
-}
-
-.stats-header a {
-  color: #2563eb;
-  text-decoration: none;
-  font-size: 2.3rem;
-  font-weight: 700;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(160px, 1fr));
-  gap: 24px;
-}
-
-@media (max-width: 900px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

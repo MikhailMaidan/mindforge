@@ -13,42 +13,18 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <section class="overview">
+  <section class="rounded-xl border border-slate-300 bg-white/70 p-5 shadow-sm">
     <header>
-      <h1>Mental Arithmetic Training</h1>
-      <p>Sharpen your mind and focus through mental calculation exercises</p>
+      <h1 class="m-0 text-4xl font-extrabold leading-tight text-slate-900 md:text-6xl">
+        Mental Arithmetic Training
+      </h1>
+      <p class="mt-3 text-lg text-slate-700 md:text-2xl">
+        Sharpen your mind and focus through mental calculation exercises
+      </p>
     </header>
-    <div class="content">
+    <div class="mt-5 grid items-start gap-4 xl:grid-cols-[2.2fr_1fr]">
       <TrainingConfigurator @customize="emit('customize')" />
       <SessionHistoryList title="Your History" :items="history" />
     </div>
   </section>
 </template>
-
-<style scoped>
-h1 {
-  margin: 0;
-  font-size: 5.6rem;
-  line-height: 1.1;
-}
-
-p {
-  margin: 12px 0 0;
-  font-size: 2.1rem;
-  color: #374151;
-}
-
-.content {
-  margin-top: 22px;
-  display: grid;
-  grid-template-columns: 2.2fr 1fr;
-  gap: 18px;
-  align-items: start;
-}
-
-@media (max-width: 1200px) {
-  .content {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

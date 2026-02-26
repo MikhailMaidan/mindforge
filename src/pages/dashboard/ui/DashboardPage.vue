@@ -15,9 +15,9 @@ const openCustomizePanel = () => {
 </script>
 
 <template>
-  <main class="layout">
+  <main class="grid min-h-screen grid-cols-1 xl:grid-cols-[minmax(280px,360px)_1fr]">
     <SidebarWidget />
-    <section class="content">
+    <section class="grid content-start gap-4 p-5 md:p-6">
       <TopActionsWidget />
       <TrainingOverviewWidget :history="mockSessionHistory" @customize="openCustomizePanel" />
       <QuickTrainingChallengeWidget v-if="showQuickTrainingOptions" />
@@ -29,24 +29,3 @@ const openCustomizePanel = () => {
     </section>
   </main>
 </template>
-
-<style scoped>
-.layout {
-  display: grid;
-  grid-template-columns: minmax(280px, 360px) 1fr;
-  min-height: 100vh;
-}
-
-.content {
-  padding: 20px 26px 26px;
-  display: grid;
-  gap: 18px;
-  align-content: start;
-}
-
-@media (max-width: 1200px) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-}
-</style>

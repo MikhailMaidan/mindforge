@@ -3,14 +3,7 @@ import { WarmUpSession } from '~features/warm-up-session'
 </script>
 
 <template>
-  <main class="page">
+  <main class="min-h-screen px-3 py-5">
     <WarmUpSession />
   </main>
 </template>
-
-<style scoped>
-.page {
-  min-height: 100vh;
-  padding: 20px 12px;
-}
-</style>

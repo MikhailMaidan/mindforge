@@ -9,44 +9,16 @@ const normalizedValue = Math.min(Math.max(props.value, 0), 100)
 </script>
 
 <template>
-  <article class="donut-card">
+  <article class="text-center">
     <div
-      class="donut"
+      class="mx-auto grid h-[190px] w-[190px] place-items-center rounded-full"
       :style="{
         background: `conic-gradient(${color} ${normalizedValue}%, #d4d4d8 ${normalizedValue}% 100%)`,
       }"
       aria-hidden="true"
     >
-      <div class="hole" />
+      <div class="h-[82px] w-[82px] rounded-full bg-slate-100" />
     </div>
-    <p class="title">{{ title }}</p>
+    <p class="mt-4 text-2xl font-bold text-slate-800">{{ title }}</p>
   </article>
 </template>
-
-<style scoped>
-.donut-card {
-  text-align: center;
-}
-
-.donut {
-  width: 190px;
-  height: 190px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  margin: 0 auto;
-}
-
-.hole {
-  width: 82px;
-  height: 82px;
-  border-radius: 50%;
-  background: #f3f4f6;
-}
-
-.title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin: 18px 0 0;
-}
-</style>
