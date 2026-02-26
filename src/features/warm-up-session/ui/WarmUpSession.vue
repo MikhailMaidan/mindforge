@@ -66,14 +66,24 @@ const minSliderPercent = computed(() => ((setupState.minNumber - minRange) * 100
 const maxSliderPercent = computed(() => ((setupState.maxNumber - minRange) * 100) / (maxRange - minRange))
 
 const progressPreviewCount = computed(() => totalSelectedTasks.value)
-const progressPreviewRows = computed(() => Math.ceil(progressPreviewCount.value / 10))
-const progressPreviewGridStyle = computed(() => ({
+const progressPreviewSlots = computed(() =>
+  Array.from({ length: 100 }, (_, index) => index < progressPreviewCount.value),
+)
+const progressPreviewGridStyle = {
   gridTemplateColumns: 'repeat(10, minmax(0, 1fr))',
-  gridTemplateRows: `repeat(${progressPreviewRows.value}, minmax(0, 1fr))`,
-}))
-const progressGridStyle = computed(() => ({
-  gridTemplateColumns: `repeat(${totalTasks.value}, minmax(0, 1fr))`,
-}))
+  gridTemplateRows: 'repeat(10, minmax(0, 1fr))',
+}
+const progressSlots = computed(() =>
+  Array.from(
+    { length: 100 },
+    (_, index): 'pending' | 'correct' | 'wrong' | null =>
+      (index < results.value.length ? (results.value[index] ?? null) : null),
+  ),
+)
+const progressGridStyle = {
+  gridTemplateColumns: 'repeat(10, minmax(0, 1fr))',
+  gridTemplateRows: 'repeat(10, minmax(0, 1fr))',
+}
 
 watch(
   [started, currentTaskIndex],
@@ -85,7 +95,8 @@ watch(
   { immediate: true },
 )
 
-const progressClass = (status: 'pending' | 'correct' | 'wrong'): string => {
+const progressClass = (status: 'pending' | 'correct' | 'wrong' | null): string => {
+  if (status === null) return 'bg-transparent'
   if (status === 'correct') return 'bg-green-600'
   if (status === 'wrong') return 'bg-red-600'
   return 'bg-slate-200'
@@ -170,7 +181,7 @@ const launchSession = () => {
             <button
               v-for="option in operationOptions"
               :key="option.id"
-              class="h-full min-h-12 rounded-lg border px-3 py-3 text-left text-lg font-medium"
+              class="flex h-full min-h-12 items-center justify-center rounded-lg border px-3 py-3 text-center text-[clamp(1rem,2vw,1.5rem)] font-medium"
               :class="setupState.operations[option.id] ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-300 bg-white text-slate-500'"
               type="button"
               @click="toggleOperation(option.id)"
@@ -235,9 +246,9 @@ const launchSession = () => {
           <div class="mt-2 flex-1 rounded-md border border-slate-300 bg-white p-2">
             <div class="grid h-full gap-1.5" :style="progressPreviewGridStyle">
               <span
-                v-for="index in progressPreviewCount"
+                v-for="(isActive, index) in progressPreviewSlots"
                 :key="index"
-                class="h-full min-h-2 w-full rounded-sm bg-blue-300"
+                :class="['h-full w-full rounded-sm', isActive ? 'bg-blue-300' : 'bg-transparent']"
               />
             </div>
           </div>
@@ -322,9 +333,9 @@ const launchSession = () => {
         </p>
         <div class="mt-2 grid gap-1" :style="progressGridStyle">
           <span
-            v-for="(result, index) in results"
+            v-for="(result, index) in progressSlots"
             :key="index"
-            :class="['h-6 rounded-sm', progressClass(result)]"
+            :class="['h-2 w-full rounded-sm', progressClass(result)]"
           />
         </div>
       </footer>
