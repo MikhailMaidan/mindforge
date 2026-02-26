@@ -5,31 +5,31 @@ const sessions = ['Maggot', 'School', 'Student', 'Master', 'PhD', 'Engineer', 'M
 
 <template>
   <aside
-    class="grid min-h-[auto] grid-rows-[auto_auto_1fr_auto] border-r border-slate-400 bg-slate-200 xl:min-h-screen"
+    class="grid h-full min-h-0 grid-rows-[auto_auto_1fr_auto] border-r border-slate-400 bg-slate-200"
   >
-    <header class="border-b border-slate-400 p-6">
-      <div class="text-5xl font-extrabold text-slate-900">MindForge</div>
+    <header class="border-b border-slate-400 p-4">
+      <div class="text-4xl font-extrabold text-slate-900">MindForge</div>
     </header>
 
-    <nav class="grid gap-2 p-5">
+    <nav class="grid gap-1.5 p-4">
       <a
         v-for="item in menuItems"
         :key="item"
         href="#"
-        class="rounded-xl px-3 py-2 text-2xl text-slate-900 transition hover:bg-indigo-100"
+        class="rounded-xl px-3 py-1.5 text-xl text-slate-900 transition hover:bg-indigo-100"
         :class="{ 'bg-indigo-200': item === 'Dashboard' }"
       >
         {{ item }}
       </a>
     </nav>
 
-    <section class="border-y border-slate-400 px-5 py-4">
-      <p class="mb-3 mt-0 text-2xl font-bold text-slate-900">Popular Sessions</p>
-      <div class="grid grid-cols-2 gap-x-3 gap-y-2 text-xl text-blue-600">
+    <section class="border-y border-slate-400 px-4 py-3">
+      <p class="mb-2 mt-0 text-xl font-bold text-slate-900">Popular Sessions</p>
+      <div class="grid grid-cols-2 gap-x-3 gap-y-1.5 text-lg text-blue-600">
         <span v-for="item in sessions" :key="item">{{ item }}</span>
       </div>
     </section>
 
-    <footer class="p-5 text-2xl font-bold text-slate-900">User</footer>
+    <footer class="p-4 text-xl font-bold text-slate-900">User</footer>
   </aside>
 </template>

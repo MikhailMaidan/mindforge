@@ -14,13 +14,13 @@ const scoreClass = (score: number): string => {
 </script>
 
 <template>
-  <section class="rounded-xl border border-slate-400 bg-slate-100">
+  <section class="flex h-full flex-col rounded-xl border border-slate-400 bg-slate-100">
     <h3 class="border-b border-slate-400 p-3 text-center text-2xl font-semibold">{{ title }}</h3>
     <ul class="list-none p-0">
       <li
         v-for="item in items"
         :key="item.id"
-        class="flex items-center justify-between gap-3 border-b border-slate-400 px-3 py-2 last:border-b-0"
+        class="flex items-center justify-between gap-2 border-b border-slate-400 px-3 py-1.5 last:border-b-0"
       >
         <div>
           <p class="m-0 text-sm text-slate-700">{{ item.date }}</p>

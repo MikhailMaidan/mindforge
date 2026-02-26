@@ -15,9 +15,9 @@ const openCustomizePanel = () => {
 </script>
 
 <template>
-  <main class="grid min-h-screen grid-cols-1 xl:grid-cols-[minmax(280px,360px)_1fr]">
+  <main class="grid box-border h-screen grid-cols-1 overflow-hidden xl:grid-cols-[minmax(260px,320px)_1fr]">
     <SidebarWidget />
-    <section class="grid content-start gap-4 p-5 md:p-6">
+    <section class="grid h-full min-h-0 content-start gap-3 overflow-hidden p-4 md:p-5">
       <TopActionsWidget />
       <TrainingOverviewWidget :history="mockSessionHistory" @customize="openCustomizePanel" />
       <QuickTrainingChallengeWidget v-if="showQuickTrainingOptions" />
