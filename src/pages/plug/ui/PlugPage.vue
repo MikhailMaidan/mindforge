@@ -6,10 +6,7 @@ const sidebarCollapsed = ref(false)
 </script>
 
 <template>
-  <main
-    class="grid box-border h-screen grid-cols-1 overflow-hidden"
-    :class="sidebarCollapsed ? 'xl:grid-cols-[84px_1fr]' : 'xl:grid-cols-[minmax(260px,320px)_1fr]'"
-  >
+  <main class="plug-layout grid box-border h-screen overflow-hidden">
     <SidebarWidget :collapsed="sidebarCollapsed" @toggle-collapsed="sidebarCollapsed = !sidebarCollapsed" />
 
     <section class="grid h-full min-h-0 place-items-center overflow-hidden p-4 md:p-6">
@@ -20,3 +17,15 @@ const sidebarCollapsed = ref(false)
     </section>
   </main>
 </template>
+
+<style scoped>
+.plug-layout {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 1280px) {
+  .plug-layout {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+}
+</style>

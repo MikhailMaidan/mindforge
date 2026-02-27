@@ -82,14 +82,14 @@ const iconMaskStyle = (icon: string) => ({
   '--sidebar-icon': `url("/${icon}")`,
 })
 
-const toggleGlyph = computed(() => (props.collapsed ? '>' : '<'))
 const isProfileActive = computed(() => route.path === routes.profile)
 </script>
 
 <template>
   <aside
-    class="flex h-full min-h-0 flex-col border-r border-slate-300 bg-slate-200 py-4 transition-all duration-200"
+    class="sidebar-root flex h-full min-h-0 flex-col border-r border-slate-300 bg-slate-200 py-4"
     :class="props.collapsed ? 'px-2' : 'px-3'"
+    :style="{ '--sidebar-width': props.collapsed ? '84px' : '300px' }"
   >
     <header class="mb-4 border-b border-slate-300 pb-4">
       <div v-if="!props.collapsed" class="flex min-h-12 items-end gap-4">
@@ -99,29 +99,35 @@ const isProfileActive = computed(() => route.path === routes.profile)
           @click="onBrandClick"
         >
           <img src="/logo.png" alt="MindForge logo" class="h-12 w-12 shrink-0 object-contain" />
-          <span class="whitespace-nowrap text-4xl font-extrabold leading-none">
+          <span class="whitespace-nowrap text-3xl font-extrabold leading-none">
             <span class="text-blue-600">Mind</span><span class="text-slate-900">Forge</span>
           </span>
         </button>
 
         <button
           type="button"
-          class="inline-flex h-9 w-9 shrink-0 -translate-y-1 items-center justify-center rounded-md bg-transparent text-xl font-bold text-slate-700 transition hover:bg-slate-300/50 hover:text-slate-900"
+          class="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-md bg-transparent text-slate-700 transition hover:bg-slate-300/50 hover:text-slate-900"
           :aria-label="props.collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
           @click="emit('toggleCollapsed')"
         >
-          {{ toggleGlyph }}
+          <span
+            class="toggle-icon h-[1.8rem] w-[1.8rem] transition-transform duration-300"
+            :class="props.collapsed ? 'rotate-180' : ''"
+          />
         </button>
       </div>
 
       <div v-else class="flex min-h-12 items-center justify-center">
         <button
           type="button"
-          class="inline-flex h-9 w-9 items-center justify-center rounded-md bg-transparent text-xl font-bold text-slate-700 transition hover:bg-slate-300/50 hover:text-slate-900"
+          class="inline-flex h-12 w-12 items-center justify-center rounded-md bg-transparent text-slate-700 transition hover:bg-slate-300/50 hover:text-slate-900"
           :aria-label="props.collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
           @click="emit('toggleCollapsed')"
         >
-          {{ toggleGlyph }}
+          <span
+            class="toggle-icon h-[1.8rem] w-[1.8rem] transition-transform duration-300"
+            :class="props.collapsed ? 'rotate-180' : ''"
+          />
         </button>
       </div>
     </header>
@@ -169,12 +175,37 @@ const isProfileActive = computed(() => route.path === routes.profile)
 </template>
 
 <style scoped>
+.sidebar-root {
+  width: 100%;
+}
+
+@media (min-width: 1280px) {
+  .sidebar-root {
+    width: var(--sidebar-width);
+    transition:
+      width 360ms ease-in-out,
+      padding 360ms ease-in-out;
+  }
+}
+
 .sidebar-icon {
   mask-image: var(--sidebar-icon);
   mask-repeat: no-repeat;
   mask-size: contain;
   mask-position: center;
   -webkit-mask-image: var(--sidebar-icon);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
+  background-color: currentColor;
+}
+
+.toggle-icon {
+  mask-image: url('/sidebar-toggle.svg');
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  mask-position: center;
+  -webkit-mask-image: url('/sidebar-toggle.svg');
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: contain;
   -webkit-mask-position: center;
