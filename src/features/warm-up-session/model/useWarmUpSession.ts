@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue'
 
-type Operation = '+' | '-' | '*' | '/'
-type TaskResult = 'pending' | 'correct' | 'wrong'
+export type Operation = '+' | '-' | '*' | '/'
+export type TaskResult = 'pending' | 'correct' | 'wrong'
 
-interface WarmUpTask {
+export interface WarmUpTask {
   left: number
   right: number
   operation: Operation
