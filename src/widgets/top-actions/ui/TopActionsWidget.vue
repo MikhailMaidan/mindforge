@@ -11,6 +11,14 @@ const openWarmUp = () => {
 const openMainMenu = () => {
   router.push(routes.dashboard)
 }
+
+const openDetailedStatistics = () => {
+  router.push(routes.statistics)
+}
+
+const openUserProfile = () => {
+  router.push(routes.profile)
+}
 </script>
 
 <template>
@@ -25,14 +33,15 @@ const openMainMenu = () => {
 
     <button
       type="button"
-      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-6 py-3 text-2xl font-semibold text-slate-900 shadow-sm transition hover:bg-white"
+      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-6 py-3 text-2xl font-semibold text-white shadow-sm transition hover:brightness-105"
+      @click="openDetailedStatistics"
     >
       Detailed Statistics
     </button>
 
     <button
       type="button"
-      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 px-6 py-3 text-2xl font-semibold text-slate-900 shadow-sm transition hover:bg-white"
+      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 px-6 py-3 text-2xl font-semibold text-white shadow-sm transition hover:brightness-105"
       @click="openMainMenu"
     >
       Main Menu
@@ -40,10 +49,25 @@ const openMainMenu = () => {
 
     <button
       type="button"
-      class="inline-flex min-h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-3xl font-semibold leading-none text-slate-500 shadow-sm transition hover:bg-white"
-      aria-label="Open top menu"
+      class="inline-flex min-h-14 w-14 items-center justify-center rounded-2xl border border-blue-500 bg-blue-600 text-white shadow-sm transition hover:brightness-105"
+      aria-label="Open user profile"
+      @click="openUserProfile"
     >
-      &#9776;
+      <span class="top-icon h-7 w-7" aria-hidden="true" />
     </button>
   </section>
 </template>
+
+<style scoped>
+.top-icon {
+  mask-image: url('/profile.svg');
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  mask-position: center;
+  -webkit-mask-image: url('/profile.svg');
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  -webkit-mask-position: center;
+  background-color: currentColor;
+}
+</style>
