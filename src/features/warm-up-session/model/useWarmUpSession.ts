@@ -30,7 +30,22 @@ const randomInt = (min: number, max: number): number => {
 
 const clamp = (value: number, min: number, max: number): number => Math.min(max, Math.max(min, value))
 
-const buildTask = (config: WarmUpConfig): WarmUpTask => {
+const buildDivisionTask = (min: number, max: number): WarmUpTask => {
+  const maxRightForNonTrivial = Math.floor(max / 2)
+
+  if (min <= maxRightForNonTrivial) {
+    const right = randomInt(min, maxRightForNonTrivial)
+    const quotient = randomInt(2, Math.floor(max / right))
+    const left = right * quotient
+    return { left, right, operation: '/', answer: quotient }
+  }
+
+  // If range is too narrow, non-trivial integer division is impossible.
+  const right = randomInt(min, max)
+  return { left: right, right, operation: '/', answer: 1 }
+}
+
+export const createWarmUpTask = (config: WarmUpConfig): WarmUpTask => {
   const min = Math.min(config.minNumber, config.maxNumber)
   const max = Math.max(config.minNumber, config.maxNumber)
   const operationPool = config.enabledOperations.length > 0 ? config.enabledOperations : DEFAULT_CONFIG.enabledOperations
@@ -56,22 +71,7 @@ const buildTask = (config: WarmUpConfig): WarmUpTask => {
     return { left, right, operation, answer: left * right }
   }
 
-  const left = randomInt(min, max)
-  const divisors: number[] = []
-
-  for (let i = 1; i * i <= left; i += 1) {
-    if (left % i !== 0) continue
-    const pair = left / i
-    if (i >= min && i <= max) divisors.push(i)
-    if (pair >= min && pair <= max && pair !== i) divisors.push(pair)
-  }
-
-  if (divisors.length === 0) {
-    return { left, right: left, operation, answer: 1 }
-  }
-
-  const right = divisors[randomInt(0, divisors.length - 1)] ?? left
-  return { left, right, operation, answer: left / right }
+  return buildDivisionTask(min, max)
 }
 
 export const useWarmUpSession = () => {
@@ -81,7 +81,7 @@ export const useWarmUpSession = () => {
   const totalTasks = ref(DEFAULT_CONFIG.totalTasks)
   const answerInput = ref('')
   const results = ref<TaskResult[]>(Array.from({ length: DEFAULT_CONFIG.totalTasks }, () => 'pending'))
-  const currentTask = ref<WarmUpTask>(buildTask(DEFAULT_CONFIG))
+  const currentTask = ref<WarmUpTask>(createWarmUpTask(DEFAULT_CONFIG))
   const lastAnswerStatus = ref<TaskResult | null>(null)
 
   const sessionFinished = computed(() => started.value && currentTaskIndex.value >= totalTasks.value)
@@ -110,7 +110,7 @@ export const useWarmUpSession = () => {
     answerInput.value = ''
     lastAnswerStatus.value = null
     results.value = Array.from({ length: normalizedTotalTasks }, () => 'pending')
-    currentTask.value = buildTask(activeConfig.value)
+    currentTask.value = createWarmUpTask(activeConfig.value)
     started.value = true
   }
 
@@ -133,7 +133,7 @@ export const useWarmUpSession = () => {
     answerInput.value = ''
 
     if (currentTaskIndex.value < totalTasks.value) {
-      currentTask.value = buildTask(activeConfig.value)
+      currentTask.value = createWarmUpTask(activeConfig.value)
     }
   }
 
