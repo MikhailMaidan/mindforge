@@ -13,20 +13,25 @@ const sidebarCollapsed = ref(false)
 const openCustomizePanel = () => {
   showQuickTrainingOptions.value = true
 }
+
+const closeCustomizePanel = () => {
+  showQuickTrainingOptions.value = false
+}
 </script>
 
 <template>
   <main class="dashboard-layout grid box-border h-screen overflow-hidden">
     <SidebarWidget :collapsed="sidebarCollapsed" @toggle-collapsed="sidebarCollapsed = !sidebarCollapsed" />
-    <section class="grid h-full min-h-0 content-start gap-3 overflow-hidden p-4 md:p-5">
+    <section class="grid h-full min-h-0 content-start gap-3 overflow-y-auto p-4 md:p-5">
       <TopActionsWidget />
-      <TrainingOverviewWidget :history="mockSessionHistory" @customize="openCustomizePanel" />
-      <QuickTrainingChallengeWidget v-if="showQuickTrainingOptions" />
-      <LastSessionStatsWidget
-        v-else
-        title="Statistics of last session"
-        :stats="mockSessionStats"
-      />
+      <QuickTrainingChallengeWidget v-if="showQuickTrainingOptions" @cancel="closeCustomizePanel" />
+      <template v-else>
+        <TrainingOverviewWidget :history="mockSessionHistory" @customize="openCustomizePanel" />
+        <LastSessionStatsWidget
+          title="Statistics of last session"
+          :stats="mockSessionStats"
+        />
+      </template>
     </section>
   </main>
 </template>
