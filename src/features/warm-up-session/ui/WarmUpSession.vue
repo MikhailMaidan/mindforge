@@ -20,14 +20,15 @@ const {
   startSession,
   started,
   submitAnswer,
+  totalTimeSeconds,
   totalTasks,
   wrongAnswers,
 } = useWarmUpSession()
 
 const progressSlots = computed(() =>
   Array.from(
-    { length: 100 },
-    (_, index): TaskResult | null => (index < results.value.length ? (results.value[index] ?? null) : null),
+    { length: results.value.length },
+    (_, index): TaskResult | null => results.value[index] ?? null,
   ),
 )
 
@@ -38,6 +39,8 @@ const onAnswerInputUpdate = (value: string) => {
 const onStartSession = (config: WarmUpConfig) => {
   startSession(config)
 }
+
+const getTotalTimeSeconds = () => totalTimeSeconds.value
 </script>
 
 <template>
@@ -55,6 +58,7 @@ const onStartSession = (config: WarmUpConfig) => {
       :progress-slots="progressSlots"
       :session-finished="sessionFinished"
       :solved-tasks="solvedTasks"
+      :total-time-seconds="getTotalTimeSeconds()"
       :total-tasks="totalTasks"
       :wrong-answers="wrongAnswers"
       @open-setup="resetToSetup"

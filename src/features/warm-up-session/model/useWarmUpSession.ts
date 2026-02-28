@@ -79,10 +79,12 @@ export const useWarmUpSession = () => {
   const activeConfig = ref<WarmUpConfig>(DEFAULT_CONFIG)
   const currentTaskIndex = ref(0)
   const totalTasks = ref(DEFAULT_CONFIG.totalTasks)
+  const totalTimeSeconds = ref(0)
   const answerInput = ref('')
   const results = ref<TaskResult[]>(Array.from({ length: DEFAULT_CONFIG.totalTasks }, () => 'pending'))
   const currentTask = ref<WarmUpTask>(createWarmUpTask(DEFAULT_CONFIG))
   const lastAnswerStatus = ref<TaskResult | null>(null)
+  const sessionStartedAtMs = ref<number | null>(null)
 
   const sessionFinished = computed(() => started.value && currentTaskIndex.value >= totalTasks.value)
   const solvedTasks = computed(() => currentTaskIndex.value)
@@ -110,6 +112,8 @@ export const useWarmUpSession = () => {
     answerInput.value = ''
     lastAnswerStatus.value = null
     results.value = Array.from({ length: normalizedTotalTasks }, () => 'pending')
+    totalTimeSeconds.value = 0
+    sessionStartedAtMs.value = Date.now()
     currentTask.value = createWarmUpTask(activeConfig.value)
     started.value = true
   }
@@ -134,6 +138,12 @@ export const useWarmUpSession = () => {
 
     if (currentTaskIndex.value < totalTasks.value) {
       currentTask.value = createWarmUpTask(activeConfig.value)
+      return
+    }
+
+    if (sessionStartedAtMs.value !== null) {
+      const elapsedSeconds = (Date.now() - sessionStartedAtMs.value) / 1000
+      totalTimeSeconds.value = Math.max(0, Number(elapsedSeconds.toFixed(2)))
     }
   }
 
@@ -147,6 +157,8 @@ export const useWarmUpSession = () => {
     answerInput.value = ''
     lastAnswerStatus.value = null
     results.value = Array.from({ length: totalTasks.value }, () => 'pending')
+    totalTimeSeconds.value = 0
+    sessionStartedAtMs.value = null
   }
 
   return {
@@ -165,6 +177,7 @@ export const useWarmUpSession = () => {
     started,
     sessionFinished,
     submitAnswer,
+    totalTimeSeconds,
     totalTasks,
   }
 }
