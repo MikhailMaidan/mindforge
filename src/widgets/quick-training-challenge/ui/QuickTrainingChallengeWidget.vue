@@ -72,8 +72,12 @@ const canStartSession = computed(() => selectedOperationsCount.value > 0)
 const totalSelectedTasks = computed(() =>
   Math.min(TASK_MAX_RANGE, Math.max(TASK_MIN_RANGE, Math.floor(state.totalTasks))),
 )
-const minSliderPercent = computed(() => ((state.minNumber - MIN_RANGE) * 100) / (MAX_RANGE - MIN_RANGE))
-const maxSliderPercent = computed(() => ((state.maxNumber - MIN_RANGE) * 100) / (MAX_RANGE - MIN_RANGE))
+const minSliderPercent = computed(
+  () => ((state.minNumber - MIN_RANGE) * 100) / (MAX_RANGE - MIN_RANGE),
+)
+const maxSliderPercent = computed(
+  () => ((state.maxNumber - MIN_RANGE) * 100) / (MAX_RANGE - MIN_RANGE),
+)
 const progressPreviewSlots = computed(() =>
   Array.from({ length: 100 }, (_, index) => index < totalSelectedTasks.value),
 )
@@ -117,7 +121,9 @@ const toggleOperation = (operation: TrainingOperation) => {
 
     <div class="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
       <div class="flex h-full flex-col rounded-xl border border-slate-300 bg-slate-50 p-4">
-        <p class="m-0 text-lg font-semibold text-slate-900 md:text-xl">Choose the number of exercises</p>
+        <p class="m-0 text-lg font-semibold text-slate-900 md:text-xl">
+          Choose the number of exercises
+        </p>
         <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
           <button
             v-for="preset in TASK_PRESETS"
@@ -135,7 +141,10 @@ const toggleOperation = (operation: TrainingOperation) => {
           </button>
         </div>
 
-        <label class="mt-2 block text-base font-medium text-slate-700 md:text-lg" for="custom-task-count">
+        <label
+          class="mt-2 block text-base font-medium text-slate-700 md:text-lg"
+          for="custom-task-count"
+        >
           Custom number of tasks (1-100)
         </label>
         <input
@@ -148,7 +157,9 @@ const toggleOperation = (operation: TrainingOperation) => {
           @input="onTaskCountInput"
         />
 
-        <p class="mb-0 mt-4 text-lg font-semibold text-slate-900 md:text-xl">Choose the arithmetical operations</p>
+        <p class="mb-0 mt-4 text-lg font-semibold text-slate-900 md:text-xl">
+          Choose the arithmetical operations
+        </p>
         <div class="mt-2 grid flex-1 auto-rows-fr grid-cols-1 gap-2 md:grid-cols-2">
           <button
             v-for="option in OPERATION_OPTIONS"
@@ -165,7 +176,9 @@ const toggleOperation = (operation: TrainingOperation) => {
             <span
               :class="[
                 'operation-indicator',
-                state.operations[option.id] ? 'operation-indicator--active' : 'operation-indicator--inactive',
+                state.operations[option.id]
+                  ? 'operation-indicator--active'
+                  : 'operation-indicator--inactive',
               ]"
             >
               <span
@@ -179,20 +192,28 @@ const toggleOperation = (operation: TrainingOperation) => {
           </button>
         </div>
 
-        <p v-if="!canStartSession" class="mb-0 mt-2 text-sm text-red-600">Select at least one operation.</p>
+        <p v-if="!canStartSession" class="mb-0 mt-2 text-sm text-red-600">
+          Select at least one operation.
+        </p>
       </div>
 
       <aside class="flex h-full flex-col rounded-xl border border-slate-300 bg-slate-50 p-4">
         <p class="m-0 text-lg font-semibold text-slate-900 md:text-xl">
-          Numbers range: <span class="text-blue-700">{{ state.minNumber }} - {{ state.maxNumber }}</span>
+          Numbers range:
+          <span class="text-blue-700">{{ state.minNumber }} - {{ state.maxNumber }}</span>
         </p>
 
         <div class="mt-4">
           <div class="relative h-7">
-            <div class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 rounded bg-slate-300" />
+            <div
+              class="absolute left-0 right-0 top-1/2 h-2 -translate-y-1/2 rounded bg-slate-300"
+            />
             <div
               class="absolute top-1/2 h-2 -translate-y-1/2 rounded bg-blue-600"
-              :style="{ left: `${minSliderPercent}%`, width: `${maxSliderPercent - minSliderPercent}%` }"
+              :style="{
+                left: `${minSliderPercent}%`,
+                width: `${maxSliderPercent - minSliderPercent}%`,
+              }"
             />
             <input
               class="range-thumb absolute left-0 top-0 h-7 w-full appearance-none bg-transparent"
@@ -248,7 +269,9 @@ const toggleOperation = (operation: TrainingOperation) => {
       </aside>
     </div>
 
-    <footer class="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-2">
+    <footer
+      class="mt-3 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-2"
+    >
       <button
         type="button"
         class="inline-flex min-h-12 items-center justify-center rounded-xl bg-slate-500 px-5 py-3 text-base font-semibold text-white shadow-sm transition hover:brightness-110"
