@@ -214,7 +214,7 @@ onBeforeUnmount(() => {
 <template>
   <section class="rounded-xl border border-slate-300 bg-white/90 p-4 shadow-sm">
     <header class="mb-3 border-b border-slate-200 pb-2">
-      <h3 class="m-0 text-3xl font-extrabold text-slate-900 md:text-4xl">Custom Training Setup</h3>
+      <h3 class="m-0 text-3xl font-extrabold text-black md:text-4xl">Custom Training Setup</h3>
     </header>
 
     <div class="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
