@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { mockSessionHistory, mockSessionStats } from '~entities/session'
 import { routes } from '~shared/config/routes'
 import { LastSessionStatsWidget } from '~widgets/last-session'
@@ -16,22 +16,36 @@ interface CustomTrainingStartConfig {
   enabledOperations: string[]
 }
 
+const route = useRoute()
 const router = useRouter()
-const showQuickTrainingOptions = ref(false)
 const sidebarCollapsed = ref(false)
+const showQuickTrainingOptions = computed(() => route.query.customize === '1')
 
 const openCustomizePanel = () => {
-  showQuickTrainingOptions.value = true
+  void router.push({
+    path: routes.dashboard,
+    query: {
+      ...route.query,
+      customize: '1',
+    },
+  })
 }
 
 const closeCustomizePanel = () => {
-  showQuickTrainingOptions.value = false
+  const nextQuery = { ...route.query }
+  delete nextQuery.customize
+
+  void router.push({
+    path: routes.dashboard,
+    query: nextQuery,
+  })
 }
 
 const startCustomTraining = (config: CustomTrainingStartConfig) => {
   void router.push({
     path: routes.warmUp,
     query: {
+      source: 'custom',
       autostart: '1',
       totalTasks: String(config.totalTasks),
       minNumber: String(config.minNumber),

@@ -27,7 +27,7 @@ const formattedTotalTimeSeconds = computed(() => {
   <div class="grid h-full justify-items-center content-start pt-4 text-center md:pt-6">
     <div class="flex w-full max-w-2xl flex-col items-center gap-7">
       <div>
-        <h2 class="m-0 text-4xl font-bold text-slate-900 md:text-5xl">Warm Up Complete</h2>
+        <h2 class="m-0 text-4xl font-bold text-slate-900 md:text-5xl">Session Complete</h2>
         <p class="mt-4 text-2xl text-slate-700 md:text-3xl">Total tasks: {{ props.totalTasks }}</p>
         <p class="mt-2 text-2xl text-slate-700 md:text-3xl">Correct: {{ props.correctAnswers }}</p>
         <p class="mt-2 text-2xl text-slate-700 md:text-3xl">Wrong: {{ props.wrongAnswers }}</p>

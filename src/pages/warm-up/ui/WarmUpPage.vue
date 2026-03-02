@@ -26,6 +26,7 @@ const OPERATION_MAP: Record<string, Operation> = {
 }
 
 const route = useRoute()
+const returnToCustomSetup = computed(() => route.query.source === 'custom')
 
 const parseClampedInt = (raw: unknown, fallback: number, min: number, max: number): number => {
   const candidate = Number(raw)
@@ -67,6 +68,6 @@ const initialConfig = computed<WarmUpConfig | null>(() => {
 
 <template>
   <main class="box-border h-screen overflow-hidden px-3 py-3 md:px-4 md:py-4">
-    <WarmUpSession :initial-config="initialConfig" />
+    <WarmUpSession :initial-config="initialConfig" :return-to-custom-setup="returnToCustomSetup" />
   </main>
 </template>

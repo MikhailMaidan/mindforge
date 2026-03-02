@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import type { TaskResult, WarmUpConfig } from '../model/useWarmUpSession'
 import { useWarmUpSession } from '../model/useWarmUpSession'
+import { routes } from '~shared/config/routes'
 import WarmUpSessionView from './session/WarmUpSessionView.vue'
 import WarmUpSetupView from './setup/WarmUpSetupView.vue'
 
 const props = withDefaults(
   defineProps<{
     initialConfig?: WarmUpConfig | null
+    returnToCustomSetup?: boolean
   }>(),
   {
     initialConfig: null,
+    returnToCustomSetup: false,
   },
 )
+
+const router = useRouter()
 
 const {
   answerInput,
@@ -49,6 +55,20 @@ const onStartSession = (config: WarmUpConfig) => {
   startSession(config)
 }
 
+const onOpenSetup = () => {
+  if (props.returnToCustomSetup) {
+    void router.push({
+      path: routes.dashboard,
+      query: {
+        customize: '1',
+      },
+    })
+    return
+  }
+
+  resetToSetup()
+}
+
 const getTotalTimeSeconds = () => totalTimeSeconds.value
 
 const initialConfigStarted = ref(false)
@@ -82,7 +102,7 @@ watch(
       :total-time-seconds="getTotalTimeSeconds()"
       :total-tasks="totalTasks"
       :wrong-answers="wrongAnswers"
-      @open-setup="resetToSetup"
+      @open-setup="onOpenSetup"
       @restart-session="restartSession"
       @submit-answer="submitAnswer"
       @update-answer-input="onAnswerInputUpdate"
