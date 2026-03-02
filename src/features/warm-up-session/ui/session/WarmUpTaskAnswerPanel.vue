@@ -28,7 +28,7 @@ const statusClass = computed(() => {
 })
 
 watch(
-  () => [props.currentTask.left, props.currentTask.operation, props.currentTask.right] as const,
+  () => props.currentTask.expression,
   async () => {
     await nextTick()
     inputRef.value?.focus()
@@ -44,7 +44,7 @@ const onAnswerInput = (event: Event) => {
 <template>
   <div class="mt-4 grid grow grid-rows-[1fr_auto_auto_auto]">
     <div class="grid place-items-center text-center text-4xl font-medium text-slate-800 md:text-6xl">
-      {{ props.currentTask.left }} {{ props.currentTask.operation }} {{ props.currentTask.right }} =
+      {{ props.currentTask.expression }} =
     </div>
 
     <input

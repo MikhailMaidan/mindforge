@@ -2,23 +2,23 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { WarmUpSession } from '~features/warm-up-session'
-import type { Operation, WarmUpConfig } from '~features/warm-up-session'
+import type { Operation, SessionOperation, WarmUpConfig } from '~features/warm-up-session'
 
 const DEFAULT_OPERATIONS: Operation[] = ['+', '-', '*', '/']
 
-const OPERATION_MAP: Record<string, Operation> = {
-  addition: '+',
-  subtraction: '-',
-  multiplication: '*',
-  division: '/',
-  chains: '+',
-  powers: '*',
-  decimals: '+',
-  roots: '/',
-  trigonometry: '*',
-  logarithms: '/',
-  degrees: '*',
-  fractionals: '+',
+const OPERATION_MAP: Record<string, SessionOperation> = {
+  addition: 'addition',
+  subtraction: 'subtraction',
+  multiplication: 'multiplication',
+  division: 'division',
+  chains: 'chains',
+  powers: 'powers',
+  decimals: 'decimals',
+  roots: 'roots',
+  trigonometry: 'trigonometry',
+  logarithms: 'logarithms',
+  degrees: 'powers',
+  fractionals: 'decimals',
   '+': '+',
   '-': '-',
   '*': '*',
@@ -34,7 +34,7 @@ const parseClampedInt = (raw: unknown, fallback: number, min: number, max: numbe
   return Math.min(max, Math.max(min, Math.floor(candidate)))
 }
 
-const parseEnabledOperations = (raw: unknown): Operation[] => {
+const parseEnabledOperations = (raw: unknown): SessionOperation[] => {
   const values = Array.isArray(raw)
     ? raw.flatMap((entry) => String(entry).split(','))
     : typeof raw === 'string'
