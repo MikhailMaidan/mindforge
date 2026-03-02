@@ -1,9 +1,18 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import type { TaskResult, WarmUpConfig } from '../model/useWarmUpSession'
 import { useWarmUpSession } from '../model/useWarmUpSession'
 import WarmUpSessionView from './session/WarmUpSessionView.vue'
 import WarmUpSetupView from './setup/WarmUpSetupView.vue'
+
+const props = withDefaults(
+  defineProps<{
+    initialConfig?: WarmUpConfig | null
+  }>(),
+  {
+    initialConfig: null,
+  },
+)
 
 const {
   answerInput,
@@ -41,6 +50,18 @@ const onStartSession = (config: WarmUpConfig) => {
 }
 
 const getTotalTimeSeconds = () => totalTimeSeconds.value
+
+const initialConfigStarted = ref(false)
+
+watch(
+  () => props.initialConfig,
+  (config) => {
+    if (initialConfigStarted.value || config === null) return
+    startSession(config)
+    initialConfigStarted.value = true
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

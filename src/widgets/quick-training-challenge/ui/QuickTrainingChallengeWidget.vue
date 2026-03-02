@@ -8,8 +8,8 @@ type TrainingOperation =
   | 'multiplication'
   | 'division'
   | 'chains'
-  | 'degrees'
-  | 'fractionals'
+  | 'powers'
+  | 'decimals'
   | 'roots'
   | 'trigonometry'
   | 'logarithms'
@@ -38,6 +38,7 @@ const MIN_RANGE = 1
 const MAX_RANGE = 10000
 const PREVIEW_BASE_SLOT_COUNT = 100
 const PREVIEW_COMPACT_SLOT_COUNT = 200
+const PREVIEW_DENSE_SLOT_COUNT = 300
 const PRESTART_COUNTDOWN_SECONDS = 3
 const PRESTART_COUNTDOWN_MS = PRESTART_COUNTDOWN_SECONDS * 1000
 const PRESTART_RING_RADIUS = 44
@@ -49,8 +50,8 @@ const OPERATION_OPTIONS: readonly OperationOption[] = [
   { id: 'multiplication', label: 'Multiplication' },
   { id: 'division', label: 'Division' },
   { id: 'chains', label: 'Chains' },
-  { id: 'degrees', label: 'Degrees' },
-  { id: 'fractionals', label: 'Fractionals' },
+  { id: 'powers', label: 'Powers' },
+  { id: 'decimals', label: 'Decimals' },
   { id: 'roots', label: 'Roots' },
   { id: 'trigonometry', label: 'Trigonometry' },
   { id: 'logarithms', label: 'Logarithms' },
@@ -71,8 +72,8 @@ const state = reactive<{
     multiplication: true,
     division: true,
     chains: true,
-    degrees: true,
-    fractionals: true,
+    powers: true,
+    decimals: true,
     roots: true,
     trigonometry: false,
     logarithms: false,
@@ -92,9 +93,19 @@ const minSliderPercent = computed(
 const maxSliderPercent = computed(
   () => ((state.maxNumber - MIN_RANGE) * 100) / (MAX_RANGE - MIN_RANGE),
 )
-const compactPreview = computed(() => totalSelectedTasks.value > PREVIEW_BASE_SLOT_COUNT)
+const previewDensity = computed<'base' | 'compact' | 'dense'>(() => {
+  if (totalSelectedTasks.value > PREVIEW_COMPACT_SLOT_COUNT) return 'dense'
+  if (totalSelectedTasks.value > PREVIEW_BASE_SLOT_COUNT) return 'compact'
+  return 'base'
+})
+const compactPreview = computed(() => previewDensity.value === 'compact')
+const densePreview = computed(() => previewDensity.value === 'dense')
 const previewSlotCount = computed(() =>
-  compactPreview.value ? PREVIEW_COMPACT_SLOT_COUNT : PREVIEW_BASE_SLOT_COUNT,
+  previewDensity.value === 'dense'
+    ? PREVIEW_DENSE_SLOT_COUNT
+    : previewDensity.value === 'compact'
+      ? PREVIEW_COMPACT_SLOT_COUNT
+      : PREVIEW_BASE_SLOT_COUNT,
 )
 const progressPreviewSlots = computed(() =>
   Array.from(
@@ -356,7 +367,13 @@ onBeforeUnmount(() => {
         </p>
 
         <div class="mt-2 flex-1 rounded-md border border-slate-300 bg-white p-2">
-          <div :class="['preview-grid grid h-full', compactPreview ? 'preview-grid--compact' : '']">
+          <div
+            :class="[
+              'preview-grid grid h-full',
+              compactPreview ? 'preview-grid--compact' : '',
+              densePreview ? 'preview-grid--dense' : '',
+            ]"
+          >
             <span
               v-for="(isActive, index) in progressPreviewSlots"
               :key="index"
@@ -480,6 +497,12 @@ onBeforeUnmount(() => {
 .preview-grid--compact {
   gap: 3px;
   grid-template-columns: repeat(20, minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(0, 1fr));
+}
+
+.preview-grid--dense {
+  gap: 2px;
+  grid-template-columns: repeat(30, minmax(0, 1fr));
   grid-template-rows: repeat(10, minmax(0, 1fr));
 }
 

@@ -24,6 +24,8 @@ const DEFAULT_CONFIG: WarmUpConfig = {
   maxNumber: 100,
 }
 
+const MAX_TOTAL_TASKS = 300
+
 const randomInt = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -97,7 +99,7 @@ export const useWarmUpSession = () => {
   const startSession = (config: WarmUpConfig) => {
     const normalizedMin = clamp(Math.floor(config.minNumber), 1, 10000)
     const normalizedMax = clamp(Math.floor(config.maxNumber), normalizedMin, 10000)
-    const normalizedTotalTasks = clamp(Math.floor(config.totalTasks), 1, 100)
+    const normalizedTotalTasks = clamp(Math.floor(config.totalTasks), 1, MAX_TOTAL_TASKS)
     const normalizedOperations =
       config.enabledOperations.length > 0 ? config.enabledOperations : DEFAULT_CONFIG.enabledOperations
 

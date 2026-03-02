@@ -8,10 +8,16 @@ const props = defineProps<{
   totalTasks: number
 }>()
 
+const progressGapClass = computed(() => {
+  if (props.totalTasks > 200) return 'gap-0.5'
+  if (props.totalTasks > 100) return 'gap-1'
+  return 'gap-1.5'
+})
+
 const progressGridStyle = computed(() => {
-  const clampedTasks = Math.max(1, Math.min(props.totalTasks, 100))
-  const columns = Math.min(10, clampedTasks)
-  const rows = Math.max(1, Math.ceil(clampedTasks / 10))
+  const clampedTasks = Math.max(1, Math.min(props.totalTasks, 300))
+  const columns = clampedTasks > 200 ? 30 : clampedTasks > 100 ? 20 : Math.min(10, clampedTasks)
+  const rows = Math.max(1, Math.ceil(clampedTasks / columns))
 
   return {
     gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
@@ -32,7 +38,7 @@ const progressClass = (status: TaskResult | null): string => {
     <p class="m-0 text-center text-2xl font-bold text-slate-50 md:text-3xl">
       {{ Math.min(props.currentTaskIndex + 1, props.totalTasks) }} of {{ props.totalTasks }}
     </p>
-    <div class="mt-2 grid min-h-0 flex-1 gap-1.5" :style="progressGridStyle">
+    <div :class="['mt-2 grid min-h-0 flex-1', progressGapClass]" :style="progressGridStyle">
       <span
         v-for="(result, index) in props.progressSlots"
         :key="index"

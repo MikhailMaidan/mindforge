@@ -1,9 +1,72 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { WarmUpSession } from '~features/warm-up-session'
+import type { Operation, WarmUpConfig } from '~features/warm-up-session'
+
+const DEFAULT_OPERATIONS: Operation[] = ['+', '-', '*', '/']
+
+const OPERATION_MAP: Record<string, Operation> = {
+  addition: '+',
+  subtraction: '-',
+  multiplication: '*',
+  division: '/',
+  chains: '+',
+  powers: '*',
+  decimals: '+',
+  roots: '/',
+  trigonometry: '*',
+  logarithms: '/',
+  degrees: '*',
+  fractionals: '+',
+  '+': '+',
+  '-': '-',
+  '*': '*',
+  '/': '/',
+}
+
+const route = useRoute()
+
+const parseClampedInt = (raw: unknown, fallback: number, min: number, max: number): number => {
+  const candidate = Number(raw)
+  if (!Number.isFinite(candidate)) return fallback
+  return Math.min(max, Math.max(min, Math.floor(candidate)))
+}
+
+const parseEnabledOperations = (raw: unknown): Operation[] => {
+  const values = Array.isArray(raw)
+    ? raw.flatMap((entry) => String(entry).split(','))
+    : typeof raw === 'string'
+      ? raw.split(',')
+      : []
+
+  const mapped = values
+    .map((value) => OPERATION_MAP[value.trim().toLowerCase()])
+    .filter((value): value is Operation => value !== undefined)
+
+  return Array.from(new Set(mapped))
+}
+
+const initialConfig = computed<WarmUpConfig | null>(() => {
+  if (route.query.autostart !== '1') return null
+
+  const minNumber = parseClampedInt(route.query.minNumber, 1, 1, 10000)
+  const maxRaw = parseClampedInt(route.query.maxNumber, 100, 1, 10000)
+  const maxNumber = Math.max(minNumber, maxRaw)
+  const totalTasks = parseClampedInt(route.query.totalTasks, 10, 1, 300)
+  const enabledOperations = parseEnabledOperations(route.query.operations)
+
+  return {
+    totalTasks,
+    minNumber,
+    maxNumber,
+    enabledOperations: enabledOperations.length > 0 ? enabledOperations : DEFAULT_OPERATIONS,
+  }
+})
 </script>
 
 <template>
   <main class="box-border h-screen overflow-hidden px-3 py-3 md:px-4 md:py-4">
-    <WarmUpSession />
+    <WarmUpSession :initial-config="initialConfig" />
   </main>
 </template>
