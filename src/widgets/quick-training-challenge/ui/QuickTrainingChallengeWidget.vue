@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 import BaseButton from '~shared/ui/BaseButton.vue'
 
 type TrainingOperation =
@@ -19,15 +19,29 @@ interface OperationOption {
   label: string
 }
 
+interface CustomTrainingConfig {
+  totalTasks: number
+  minNumber: number
+  maxNumber: number
+  enabledOperations: TrainingOperation[]
+}
+
 const emit = defineEmits<{
   cancel: []
+  startSession: [config: CustomTrainingConfig]
 }>()
 
 const TASK_PRESETS = [5, 10, 15, 20, 25, 30, 35, 40] as const
 const TASK_MIN_RANGE = 1
-const TASK_MAX_RANGE = 100
+const TASK_MAX_RANGE = 300
 const MIN_RANGE = 1
 const MAX_RANGE = 10000
+const PREVIEW_BASE_SLOT_COUNT = 100
+const PREVIEW_COMPACT_SLOT_COUNT = 200
+const PRESTART_COUNTDOWN_SECONDS = 3
+const PRESTART_COUNTDOWN_MS = PRESTART_COUNTDOWN_SECONDS * 1000
+const PRESTART_RING_RADIUS = 44
+const PRESTART_RING_CIRCUMFERENCE = 2 * Math.PI * PRESTART_RING_RADIUS
 
 const OPERATION_OPTIONS: readonly OperationOption[] = [
   { id: 'addition', label: 'Addition' },
@@ -65,10 +79,10 @@ const state = reactive<{
   },
 })
 
-const selectedOperationsCount = computed(
-  () => OPERATION_OPTIONS.filter((option) => state.operations[option.id]).length,
+const selectedOperations = computed(() =>
+  OPERATION_OPTIONS.filter((option) => state.operations[option.id]).map((option) => option.id),
 )
-const canStartSession = computed(() => selectedOperationsCount.value > 0)
+const canStartSession = computed(() => selectedOperations.value.length > 0)
 const totalSelectedTasks = computed(() =>
   Math.min(TASK_MAX_RANGE, Math.max(TASK_MIN_RANGE, Math.floor(state.totalTasks))),
 )
@@ -78,9 +92,25 @@ const minSliderPercent = computed(
 const maxSliderPercent = computed(
   () => ((state.maxNumber - MIN_RANGE) * 100) / (MAX_RANGE - MIN_RANGE),
 )
-const progressPreviewSlots = computed(() =>
-  Array.from({ length: 100 }, (_, index) => index < totalSelectedTasks.value),
+const compactPreview = computed(() => totalSelectedTasks.value > PREVIEW_BASE_SLOT_COUNT)
+const previewSlotCount = computed(() =>
+  compactPreview.value ? PREVIEW_COMPACT_SLOT_COUNT : PREVIEW_BASE_SLOT_COUNT,
 )
+const progressPreviewSlots = computed(() =>
+  Array.from(
+    { length: previewSlotCount.value },
+    (_, index) => index < Math.min(totalSelectedTasks.value, previewSlotCount.value),
+  ),
+)
+
+const showPrestartModal = ref(false)
+const countdownRunning = ref(false)
+const countdownProgress = ref(1)
+const countdownSeconds = ref(PRESTART_COUNTDOWN_SECONDS)
+let countdownRafId: number | null = null
+let countdownStartTimestamp = 0
+
+const prestartRingOffset = computed(() => PRESTART_RING_CIRCUMFERENCE * (1 - countdownProgress.value))
 
 const clampInRange = (value: number) => Math.min(MAX_RANGE, Math.max(MIN_RANGE, Math.floor(value)))
 
@@ -111,12 +141,80 @@ const setPresetTaskCount = (preset: number) => {
 const toggleOperation = (operation: TrainingOperation) => {
   state.operations[operation] = !state.operations[operation]
 }
+
+const buildSessionConfig = (): CustomTrainingConfig => {
+  return {
+    totalTasks: totalSelectedTasks.value,
+    minNumber: state.minNumber,
+    maxNumber: state.maxNumber,
+    enabledOperations: selectedOperations.value,
+  }
+}
+
+const stopCountdown = () => {
+  if (countdownRafId !== null) {
+    window.cancelAnimationFrame(countdownRafId)
+    countdownRafId = null
+  }
+
+  countdownRunning.value = false
+}
+
+const closePrestartModal = () => {
+  stopCountdown()
+  showPrestartModal.value = false
+  countdownProgress.value = 1
+  countdownSeconds.value = PRESTART_COUNTDOWN_SECONDS
+}
+
+const completePrestartAndLaunch = () => {
+  closePrestartModal()
+  emit('startSession', buildSessionConfig())
+}
+
+const runCountdownFrame = (timestamp: number) => {
+  const elapsedMs = timestamp - countdownStartTimestamp
+  const remainingMs = Math.max(0, PRESTART_COUNTDOWN_MS - elapsedMs)
+
+  countdownProgress.value = remainingMs / PRESTART_COUNTDOWN_MS
+  countdownSeconds.value = Math.ceil(remainingMs / 1000)
+
+  if (remainingMs <= 0) {
+    completePrestartAndLaunch()
+    return
+  }
+
+  countdownRafId = window.requestAnimationFrame(runCountdownFrame)
+}
+
+const startPrestartCountdown = () => {
+  if (countdownRunning.value) return
+
+  countdownRunning.value = true
+  countdownProgress.value = 1
+  countdownSeconds.value = PRESTART_COUNTDOWN_SECONDS
+  countdownStartTimestamp = performance.now()
+  countdownRafId = window.requestAnimationFrame(runCountdownFrame)
+}
+
+const openPrestartModal = () => {
+  if (!canStartSession.value) return
+
+  stopCountdown()
+  showPrestartModal.value = true
+  countdownProgress.value = 1
+  countdownSeconds.value = PRESTART_COUNTDOWN_SECONDS
+}
+
+onBeforeUnmount(() => {
+  stopCountdown()
+})
 </script>
 
 <template>
   <section class="rounded-xl border border-slate-300 bg-white/90 p-4 shadow-sm">
     <header class="mb-3 border-b border-slate-200 pb-2">
-      <h3 class="m-0 text-3xl font-extrabold text-blue-700 md:text-4xl">Custom Training Setup</h3>
+      <h3 class="m-0 text-3xl font-extrabold text-slate-900 md:text-4xl">Custom Training Setup</h3>
     </header>
 
     <div class="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
@@ -145,7 +243,7 @@ const toggleOperation = (operation: TrainingOperation) => {
           class="mt-2 block text-base font-medium text-slate-700 md:text-lg"
           for="custom-task-count"
         >
-          Custom number of tasks (1-100)
+          Custom number of tasks (1-300)
         </label>
         <input
           id="custom-task-count"
@@ -258,11 +356,11 @@ const toggleOperation = (operation: TrainingOperation) => {
         </p>
 
         <div class="mt-2 flex-1 rounded-md border border-slate-300 bg-white p-2">
-          <div class="preview-grid grid h-full gap-1.5">
+          <div :class="['preview-grid grid h-full', compactPreview ? 'preview-grid--compact' : '']">
             <span
               v-for="(isActive, index) in progressPreviewSlots"
               :key="index"
-              :class="['h-full w-full rounded-sm', isActive ? 'bg-blue-300' : 'bg-transparent']"
+              :class="['preview-slot h-full w-full', isActive ? 'bg-blue-300' : 'bg-transparent']"
             />
           </div>
         </div>
@@ -279,9 +377,61 @@ const toggleOperation = (operation: TrainingOperation) => {
       >
         Cancel
       </button>
-      <BaseButton :disabled="!canStartSession">Start Session</BaseButton>
+      <BaseButton :disabled="!canStartSession" @click="openPrestartModal">Start Session</BaseButton>
     </footer>
   </section>
+
+  <Teleport to="body">
+    <div
+      v-if="showPrestartModal"
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/28 p-4 backdrop-blur-md"
+    >
+      <div class="flex w-full max-w-sm flex-col items-center rounded-2xl bg-white px-6 py-7 shadow-xl">
+        <h2 class="m-0 text-3xl font-bold text-slate-900">Are you ready</h2>
+
+        <div v-if="!countdownRunning" class="mt-5 flex w-full gap-3">
+          <button
+            type="button"
+            class="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl bg-blue-600 px-5 py-3 text-lg font-semibold text-white transition hover:brightness-110"
+            @click="startPrestartCountdown"
+          >
+            Start
+          </button>
+          <button
+            type="button"
+            class="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl bg-slate-500 px-5 py-3 text-lg font-semibold text-white transition hover:brightness-110"
+            @click="closePrestartModal"
+          >
+            Cancel
+          </button>
+        </div>
+
+        <div v-else class="mt-5">
+          <div class="relative h-28 w-28">
+            <svg class="h-full w-full -rotate-90" viewBox="0 0 120 120" role="img" aria-label="Session starts in 3 seconds">
+              <circle cx="60" cy="60" :r="PRESTART_RING_RADIUS" fill="none" stroke="#cbd5e1" stroke-width="8" />
+              <circle
+                cx="60"
+                cy="60"
+                :r="PRESTART_RING_RADIUS"
+                fill="none"
+                stroke="#2563eb"
+                stroke-width="8"
+                stroke-linecap="round"
+                :style="{
+                  strokeDasharray: `${PRESTART_RING_CIRCUMFERENCE}`,
+                  strokeDashoffset: `${prestartRingOffset}`,
+                }"
+              />
+            </svg>
+            <p class="absolute inset-0 m-0 flex items-center justify-center text-4xl font-bold text-slate-900">
+              {{ countdownSeconds }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Teleport>
 </template>
 
 <style scoped>
@@ -322,8 +472,19 @@ const toggleOperation = (operation: TrainingOperation) => {
 }
 
 .preview-grid {
+  gap: 6px;
   grid-template-columns: repeat(10, minmax(0, 1fr));
   grid-template-rows: repeat(10, minmax(0, 1fr));
+}
+
+.preview-grid--compact {
+  gap: 3px;
+  grid-template-columns: repeat(20, minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(0, 1fr));
+}
+
+.preview-slot {
+  border-radius: 0.125rem;
 }
 
 .operation-indicator {
