@@ -8,6 +8,7 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
+  quickStart: []
   customize: []
 }>()
 </script>
@@ -23,7 +24,7 @@ const emit = defineEmits<{
       </p>
     </header>
     <div class="mt-4 grid items-stretch gap-3 xl:grid-cols-[2.2fr_1fr]">
-      <TrainingConfigurator @customize="emit('customize')" />
+      <TrainingConfigurator @quick-start="emit('quickStart')" @customize="emit('customize')" />
       <SessionHistoryList title="Your History" :items="history" />
     </div>
   </section>

@@ -8,6 +8,7 @@ const checklist = [
 ]
 
 const emit = defineEmits<{
+  quickStart: []
   customize: []
 }>()
 </script>
@@ -29,7 +30,7 @@ const emit = defineEmits<{
       </li>
     </ol>
     <div class="mt-auto flex flex-wrap justify-center gap-3 pt-5 md:justify-between">
-      <BaseButton>Quick Trainings</BaseButton>
+      <BaseButton @click="emit('quickStart')">Quick Trainings</BaseButton>
       <BaseButton @click="emit('customize')">Customize &gt;</BaseButton>
     </div>
   </section>

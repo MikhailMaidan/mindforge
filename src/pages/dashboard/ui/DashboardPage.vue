@@ -54,6 +54,21 @@ const startCustomTraining = (config: CustomTrainingStartConfig) => {
     },
   })
 }
+
+const startQuickTraining = () => {
+  void router.push({
+    path: routes.warmUp,
+    query: {
+      source: 'quick',
+      autostart: '1',
+      countdown: '1',
+      totalTasks: '10',
+      minNumber: '100',
+      maxNumber: '200',
+      operations: 'addition,subtraction,multiplication,division',
+    },
+  })
+}
 </script>
 
 <template>
@@ -67,7 +82,11 @@ const startCustomTraining = (config: CustomTrainingStartConfig) => {
         @start-session="startCustomTraining"
       />
       <template v-else>
-        <TrainingOverviewWidget :history="mockSessionHistory" @customize="openCustomizePanel" />
+        <TrainingOverviewWidget
+          :history="mockSessionHistory"
+          @customize="openCustomizePanel"
+          @quick-start="startQuickTraining"
+        />
         <LastSessionStatsWidget
           title="Statistics of last session"
           :stats="mockSessionStats"
