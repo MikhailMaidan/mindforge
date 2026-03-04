@@ -50,7 +50,7 @@ const onAnswerInput = (event: Event) => {
     <input
       ref="inputRef"
       :value="props.answerInput"
-      class="mt-2 w-full border-0 border-b-[3px] border-blue-600 bg-transparent px-1 py-2 text-3xl text-slate-900 outline-none placeholder:text-slate-400 md:text-5xl"
+      class="mt-2 w-full border-0 border-b-[3px] border-blue-600 bg-transparent px-1 py-2 text-3xl font-medium text-slate-900 outline-none placeholder:text-slate-400 md:text-5xl"
       type="text"
       inputmode="numeric"
       placeholder="Your answer"
