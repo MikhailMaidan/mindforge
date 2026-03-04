@@ -21,7 +21,6 @@ defineProps<{
         :key="item.id"
         :title="item.title"
         :value="item.value"
-        :color="item.color"
       />
     </div>
   </section>

@@ -1,4 +1,8 @@
-import { DEFAULT_CONFIG, type CanonicalOperation, type SessionOperation } from './warmUpSession.types'
+import {
+  DEFAULT_CONFIG,
+  type CanonicalOperation,
+  type SessionOperation,
+} from './warmUpSession.types'
 
 export const SUPPORTED_CANONICAL_OPERATIONS: readonly CanonicalOperation[] = [
   '+',

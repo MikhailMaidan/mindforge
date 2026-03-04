@@ -9,7 +9,7 @@ export const mockSessionHistory: SessionHistoryItem[] = [
 ]
 
 export const mockSessionStats: SessionStat[] = [
-  { id: 'accuracy', title: 'Accuracy', value: 33, color: '#e11d48' },
-  { id: 'time', title: 'Time', value: 61, color: '#eab308' },
-  { id: 'efficiency', title: 'Efficiency', value: 72, color: '#15803d' },
+  { id: 'accuracy', title: 'Accuracy', value: 33 },
+  { id: 'time', title: 'Time', value: 61 },
+  { id: 'efficiency', title: 'Efficiency', value: 72 },
 ]

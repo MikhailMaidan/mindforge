@@ -10,5 +10,4 @@ export interface SessionStat {
   id: string
   title: string
   value: number
-  color: string
 }
