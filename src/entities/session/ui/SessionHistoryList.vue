@@ -23,8 +23,8 @@ const scoreClass = (score: number): string => {
         class="flex items-center justify-between gap-2 border-b border-slate-400 px-3 py-1.5 last:border-b-0"
       >
         <div>
-          <p class="m-0 text-sm text-slate-700">{{ item.date }}</p>
-          <p class="m-0 text-sm text-slate-800">{{ item.timeRange }}</p>
+          <p class="m-0 text-sm font-semibold text-blue-700">{{ item.date }}</p>
+          <p class="m-0 text-sm font-semibold text-blue-600">{{ item.timeRange }}</p>
         </div>
         <div class="flex items-center gap-2.5">
           <span
