@@ -33,7 +33,7 @@ const openUserProfile = () => {
 
     <button
       type="button"
-      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-blue-600 bg-blue-700 px-6 py-3 text-2xl font-semibold text-white shadow-sm transition hover:bg-blue-800"
+      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-blue-700 bg-blue-700 px-6 py-3 text-2xl font-semibold text-white shadow-sm transition hover:brightness-105"
       @click="openDetailedStatistics"
     >
       Detailed Statistics
@@ -41,7 +41,7 @@ const openUserProfile = () => {
 
     <button
       type="button"
-      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-blue-600 bg-blue-700 px-6 py-3 text-2xl font-semibold text-white shadow-sm transition hover:bg-blue-800"
+      class="inline-flex min-h-14 items-center justify-center rounded-2xl border border-blue-700 bg-blue-700 px-6 py-3 text-2xl font-semibold text-white shadow-sm transition hover:brightness-105"
       @click="openMainMenu"
     >
       Main Menu

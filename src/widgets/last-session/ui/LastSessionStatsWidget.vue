@@ -21,7 +21,7 @@ const onViewAllClick = () => {
       <h3 class="mb-2 text-3xl font-extrabold text-slate-900 md:text-5xl">{{ title }}</h3>
       <button
         type="button"
-        class="mb-2 border-0 border-b border-blue-300 bg-transparent p-0 text-xl font-bold text-blue-600 md:text-3xl"
+        class="mb-2 border-0 bg-transparent p-0 text-xl font-bold text-blue-600 no-underline md:text-3xl"
         @click="onViewAllClick"
       >
         View All &gt;
