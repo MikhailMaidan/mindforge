@@ -16,23 +16,28 @@ const onViewAllClick = () => {
 </script>
 
 <template>
-  <section class="rounded-xl border border-slate-400 bg-slate-100 p-4">
-    <header class="mb-5 flex items-end justify-between gap-3 border-b border-slate-400">
-      <h3 class="mb-2 text-3xl font-extrabold text-slate-900 md:text-5xl">{{ title }}</h3>
+  <section
+    class="rounded-3xl border border-blue-100 bg-white/85 p-5 shadow-[0_24px_60px_-42px_rgba(30,64,175,0.65)] backdrop-blur md:p-6"
+  >
+    <header class="mb-5 flex items-end justify-between gap-3 border-b border-blue-100 pb-3">
+      <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">{{ title }}</h3>
       <button
         type="button"
-        class="mb-2 border-0 bg-transparent p-0 text-xl font-bold text-blue-600 no-underline md:text-3xl"
+        class="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 px-4 py-1.5 text-sm font-bold uppercase tracking-wide text-blue-600 transition hover:bg-blue-100 md:text-base"
         @click="onViewAllClick"
       >
-        View All &gt;
+        View All
       </button>
     </header>
 
-    <p v-if="showViewAllNotice" class="mb-5 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-lg font-semibold text-blue-700">
+    <p
+      v-if="showViewAllNotice"
+      class="mb-5 rounded-2xl border border-blue-200 bg-blue-50/85 px-4 py-3 text-sm font-semibold text-blue-700 md:text-base"
+    >
       Complete at least one full session.
     </p>
 
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
       <ProgressDonut
         v-for="item in stats"
         :key="item.id"

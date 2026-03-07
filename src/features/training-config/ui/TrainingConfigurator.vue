@@ -14,22 +14,24 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <section class="flex h-full flex-col rounded-xl border border-slate-400 bg-slate-100 p-4">
-    <ol class="grid list-none gap-2 p-0">
+  <section
+    class="flex h-full flex-col rounded-3xl border border-blue-100 bg-white/85 p-5 shadow-[0_18px_50px_-35px_rgba(30,64,175,0.55)] backdrop-blur"
+  >
+    <ol class="grid list-none gap-3 p-0">
       <li
         v-for="(item, index) in checklist"
         :key="item"
-        class="flex items-center gap-3 text-xl md:text-2xl"
+        class="flex items-center gap-3 rounded-2xl border border-blue-100/80 bg-slate-50/90 px-3 py-2 text-lg font-medium text-slate-700 md:text-xl"
       >
         <span
-          class="inline-flex h-10 w-10 items-center justify-center rounded-full border-4 border-slate-500 text-xl text-slate-900"
+          class="inline-flex h-10 w-10 items-center justify-center rounded-xl border-2 border-blue-200 bg-blue-50 text-base font-bold text-blue-700"
         >
           {{ index + 1 }}
         </span>
-        <span>{{ item }}</span>
+        <span class="leading-snug">{{ item }}</span>
       </li>
     </ol>
-    <div class="mt-auto flex flex-wrap justify-center gap-3 pt-5 md:justify-between">
+    <div class="mt-auto flex flex-wrap justify-center gap-3 pt-6 md:justify-between">
       <BaseButton @click="emit('quickStart')">Quick Trainings</BaseButton>
       <BaseButton @click="emit('customize')">Customize &gt;</BaseButton>
     </div>

@@ -72,9 +72,9 @@ const startQuickTraining = () => {
 </script>
 
 <template>
-  <main class="dashboard-layout grid box-border h-screen overflow-hidden">
+  <main class="dashboard-layout grid box-border overflow-hidden">
     <SidebarWidget :collapsed="sidebarCollapsed" @toggle-collapsed="sidebarCollapsed = !sidebarCollapsed" />
-    <section class="grid h-full min-h-0 content-start gap-3 overflow-y-auto p-4 md:p-5">
+    <section class="relative z-10 grid h-full min-h-0 content-start gap-4 overflow-y-auto p-4 md:p-6">
       <TopActionsWidget />
       <QuickTrainingChallengeWidget
         v-if="showQuickTrainingOptions"
@@ -99,6 +99,11 @@ const startQuickTraining = () => {
 <style scoped>
 .dashboard-layout {
   grid-template-columns: 1fr;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(59, 130, 246, 0.2), transparent 38%),
+    radial-gradient(circle at 88% 84%, rgba(56, 189, 248, 0.18), transparent 34%),
+    linear-gradient(180deg, #f8fbff 0%, #edf4ff 100%);
 }
 
 @media (min-width: 1280px) {
