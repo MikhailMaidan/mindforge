@@ -15,7 +15,7 @@ const emit = defineEmits<{
 
 <template>
   <section
-    class="relative overflow-hidden rounded-3xl border border-blue-100 bg-white/85 p-5 shadow-[0_24px_55px_-38px_rgba(37,99,235,0.65)] backdrop-blur md:p-6"
+    class="relative overflow-hidden rounded-3xl border border-blue-100 bg-white/85 p-4 shadow-[0_24px_55px_-38px_rgba(37,99,235,0.65)] backdrop-blur"
   >
     <div class="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-blue-200/45 blur-3xl" />
     <div class="pointer-events-none absolute -bottom-16 left-12 h-44 w-44 rounded-full bg-sky-200/35 blur-3xl" />
@@ -27,9 +27,9 @@ const emit = defineEmits<{
         Sharpen your mind and focus through mental calculation exercises
       </p>
     </header>
-    <div class="relative z-10 mt-5 grid items-stretch gap-4 xl:grid-cols-[2.2fr_1fr]">
+    <div class="relative z-10 mt-4 grid items-start gap-3 xl:grid-cols-[2.2fr_1fr]">
       <TrainingConfigurator @quick-start="emit('quickStart')" @customize="emit('customize')" />
-      <SessionHistoryList title="Your History" :items="history" />
+      <SessionHistoryList class="xl:-mt-8" title="Your History" :items="history" />
     </div>
   </section>
 </template>

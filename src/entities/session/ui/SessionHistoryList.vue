@@ -9,16 +9,16 @@ defineProps<{
 
 <template>
   <section
-    class="flex h-full flex-col rounded-3xl border border-blue-100 bg-white/85 shadow-[0_18px_40px_-30px_rgba(37,99,235,0.65)] backdrop-blur"
+    class="flex flex-col rounded-3xl border border-blue-100 bg-white/85 shadow-[0_18px_40px_-30px_rgba(37,99,235,0.65)] backdrop-blur"
   >
-    <h3 class="border-b border-blue-100 px-4 py-3 text-center text-2xl font-extrabold tracking-tight text-slate-900">
+    <h3 class="border-b border-blue-100 px-4 py-2.5 text-center text-2xl font-extrabold tracking-tight text-slate-900">
       {{ title }}
     </h3>
-    <ul class="list-none space-y-2 p-3">
+    <ul class="list-none space-y-1.5 p-2.5">
       <li
         v-for="item in items"
         :key="item.id"
-        class="flex items-center justify-between gap-2 rounded-2xl border border-blue-100/70 bg-slate-50/90 px-3 py-2 transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-white"
+        class="flex items-center justify-between gap-2 rounded-2xl border border-blue-100/70 bg-slate-50/90 px-3 py-1.5 transition duration-200 hover:-translate-y-0.5 hover:border-blue-200 hover:bg-white"
       >
         <div>
           <p class="m-0 text-sm font-semibold text-blue-700">{{ item.date }}</p>

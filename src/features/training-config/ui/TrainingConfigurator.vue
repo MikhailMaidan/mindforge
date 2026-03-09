@@ -15,9 +15,9 @@ const emit = defineEmits<{
 
 <template>
   <section
-    class="flex h-full flex-col rounded-3xl border border-blue-100 bg-white/85 p-5 shadow-[0_18px_50px_-35px_rgba(30,64,175,0.55)] backdrop-blur"
+    class="flex flex-col rounded-3xl border border-blue-100 bg-white/85 p-4 shadow-[0_18px_50px_-35px_rgba(30,64,175,0.55)] backdrop-blur"
   >
-    <ol class="grid list-none gap-3 p-0">
+    <ol class="grid list-none gap-2.5 p-0">
       <li
         v-for="(item, index) in checklist"
         :key="item"
@@ -31,7 +31,7 @@ const emit = defineEmits<{
         <span class="leading-snug">{{ item }}</span>
       </li>
     </ol>
-    <div class="mt-auto flex flex-wrap justify-center gap-3 pt-6 md:justify-between">
+    <div class="mt-4 flex flex-wrap justify-center gap-3 pt-2 md:justify-between">
       <BaseButton @click="emit('quickStart')">Quick Trainings</BaseButton>
       <BaseButton @click="emit('customize')">Customize &gt;</BaseButton>
     </div>

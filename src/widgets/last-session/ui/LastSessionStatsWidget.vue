@@ -17,9 +17,9 @@ const onViewAllClick = () => {
 
 <template>
   <section
-    class="rounded-3xl border border-blue-100 bg-white/85 p-5 shadow-[0_24px_60px_-42px_rgba(30,64,175,0.65)] backdrop-blur md:p-6"
+    class="rounded-3xl border border-blue-100 bg-white/85 p-4 shadow-[0_24px_60px_-42px_rgba(30,64,175,0.65)] backdrop-blur"
   >
-    <header class="mb-5 flex items-end justify-between gap-3 border-b border-blue-100 pb-3">
+    <header class="mb-4 flex items-end justify-between gap-3 border-b border-blue-100 pb-2.5">
       <h3 class="text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl">{{ title }}</h3>
       <button
         type="button"
@@ -37,7 +37,7 @@ const onViewAllClick = () => {
       Complete at least one full session.
     </p>
 
-    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
       <ProgressDonut
         v-for="item in stats"
         :key="item.id"
