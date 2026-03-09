@@ -74,7 +74,7 @@ const startQuickTraining = () => {
 <template>
   <main class="dashboard-layout grid box-border overflow-hidden">
     <SidebarWidget :collapsed="sidebarCollapsed" @toggle-collapsed="sidebarCollapsed = !sidebarCollapsed" />
-    <section class="relative z-10 grid h-full min-h-0 content-start gap-3 overflow-y-auto p-3">
+    <section class="relative z-10 grid h-full min-h-0 content-start gap-2 overflow-y-auto p-2.5 xl:p-3">
       <TopActionsWidget />
       <QuickTrainingChallengeWidget
         v-if="showQuickTrainingOptions"
