@@ -27,9 +27,9 @@ const emit = defineEmits<{
         Sharpen your mind and focus through mental calculation exercises
       </p>
     </header>
-    <div class="relative z-10 mt-3 grid items-start gap-2 xl:grid-cols-[2.2fr_1fr]">
+    <div class="relative z-10 mt-3 grid items-end gap-2 xl:grid-cols-[2.2fr_1fr]">
       <TrainingConfigurator @quick-start="emit('quickStart')" @customize="emit('customize')" />
-      <SessionHistoryList class="xl:-mt-4 xl:-mb-4" title="Your History" :items="history" />
+      <SessionHistoryList title="Your History" :items="history" />
     </div>
   </section>
 </template>
