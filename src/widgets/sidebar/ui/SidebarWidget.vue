@@ -168,7 +168,7 @@ const isProfileActive = computed(() => route.path === routes.profile)
         <span class="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-300/80">
           <span class="sidebar-icon h-5 w-5 text-slate-900" :style="iconMaskStyle('profile.svg')" aria-hidden="true" />
         </span>
-        <span v-if="!props.collapsed" class="text-2xl font-semibold leading-none">User</span>
+        <span v-if="!props.collapsed" class="ml-auto text-2xl font-semibold leading-none">User</span>
       </button>
     </footer>
   </aside>
