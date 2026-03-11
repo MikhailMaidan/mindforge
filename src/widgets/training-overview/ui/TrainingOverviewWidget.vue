@@ -17,13 +17,19 @@ const emit = defineEmits<{
   <section
     class="relative overflow-hidden rounded-3xl border border-blue-100 bg-white/85 p-3 shadow-[0_24px_55px_-38px_rgba(37,99,235,0.65)] backdrop-blur"
   >
-    <div class="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-blue-200/45 blur-3xl" />
-    <div class="pointer-events-none absolute -bottom-16 left-12 h-44 w-44 rounded-full bg-sky-200/35 blur-3xl" />
+    <div
+      class="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-blue-200/45 blur-3xl"
+    />
+    <div
+      class="pointer-events-none absolute -bottom-16 left-12 h-44 w-44 rounded-full bg-sky-200/35 blur-3xl"
+    />
     <header class="relative z-10">
-      <h1 class="m-0 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl">
+      <h1
+        class="m-0 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl"
+      >
         Mental Arithmetic Training
       </h1>
-      <p class="mt-2 text-base text-slate-600 md:text-lg">
+      <p class="mt-2 text-[1.2rem] text-slate-600 md:text-[1.35rem]">
         Sharpen your mind and focus through mental calculation exercises
       </p>
     </header>
