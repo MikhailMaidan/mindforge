@@ -21,10 +21,10 @@ const emit = defineEmits<{
       <li
         v-for="(item, index) in checklist"
         :key="item"
-        class="flex items-center gap-3 rounded-2xl border border-blue-100/80 bg-slate-50/90 px-3 py-1.5 text-lg font-medium text-slate-700 md:text-xl"
+        class="flex items-center gap-3 rounded-2xl border border-blue-100/80 bg-slate-50/90 px-3 py-2 text-xl font-medium text-slate-700 md:text-2xl"
       >
         <span
-          class="inline-flex h-10 w-10 items-center justify-center rounded-xl border-2 border-blue-200 bg-blue-50 text-base font-bold text-blue-700"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-xl border-2 border-blue-200 bg-blue-50 text-lg font-bold text-blue-700"
         >
           {{ index + 1 }}
         </span>
