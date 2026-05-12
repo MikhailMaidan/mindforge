@@ -87,7 +87,7 @@ describe('createWarmUpTask random generation', () => {
     }
   })
 
-  it('builds logarithm tasks with integer answers', () => {
+  it('builds logarithm tasks with integer or clean decimal answers', () => {
     const config: WarmUpConfig = {
       totalTasks: 50,
       enabledOperations: ['logarithms'],
@@ -98,7 +98,24 @@ describe('createWarmUpTask random generation', () => {
     for (let i = 0; i < 200; i += 1) {
       const task = createWarmUpTask(config)
       expect(task.operation).toBe('logarithms')
-      expect(Number.isInteger(task.answer)).toBe(true)
+      expect(Number.isInteger(task.answer) || task.answer === 0.5).toBe(true)
+      expect(task.left).toBe(task.right ** task.answer)
+    }
+  })
+
+  it('can build logarithm tasks with clean half-step decimal answers', () => {
+    const config: WarmUpConfig = {
+      totalTasks: 50,
+      enabledOperations: ['logarithms'],
+      minNumber: 2,
+      maxNumber: 5,
+    }
+
+    for (let i = 0; i < 80; i += 1) {
+      const task = createWarmUpTask(config)
+      expect(task.operation).toBe('logarithms')
+      expect(task.answer).toBe(0.5)
+      expect(task.expression).not.toContain('sqrt')
       expect(task.left).toBe(task.right ** task.answer)
     }
   })

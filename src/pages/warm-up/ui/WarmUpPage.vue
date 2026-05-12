@@ -2,9 +2,9 @@
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { WarmUpSession } from '~features/warm-up-session'
-import type { Operation, SessionOperation, WarmUpConfig } from '~features/warm-up-session'
+import type { SessionOperation, WarmUpConfig } from '~features/warm-up-session'
 
-const DEFAULT_OPERATIONS: Operation[] = ['+', '-', '*', '/']
+const DEFAULT_OPERATIONS: SessionOperation[] = ['+', '-', '*', '/']
 const PRESTART_COUNTDOWN_SECONDS = 3
 const PRESTART_COUNTDOWN_MS = PRESTART_COUNTDOWN_SECONDS * 1000
 const PRESTART_RING_RADIUS = 44
@@ -49,7 +49,7 @@ const parseEnabledOperations = (raw: unknown): SessionOperation[] => {
 
   const mapped = values
     .map((value) => OPERATION_MAP[value.trim().toLowerCase()])
-    .filter((value): value is Operation => value !== undefined)
+    .filter((value): value is SessionOperation => value !== undefined)
 
   return Array.from(new Set(mapped))
 }

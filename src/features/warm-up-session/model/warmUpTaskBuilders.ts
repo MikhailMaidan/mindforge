@@ -214,8 +214,9 @@ export const buildTrigonometryTask = (min: number, max: number): WarmUpTask => {
 
 export const buildLogarithmTask = (min: number, max: number): WarmUpTask => {
   const candidates: Array<{ base: number; value: number; answer: number }> = []
+  const halfStepCandidates: Array<{ base: number; value: number; answer: number }> = []
 
-  for (const base of [2, 3, 4, 5, 10] as const) {
+  for (const base of [2, 3, 4, 5, 9, 10, 16, 25, 100] as const) {
     for (let exponent = 1; exponent <= 6; exponent += 1) {
       const value = base ** exponent
 
@@ -225,7 +226,26 @@ export const buildLogarithmTask = (min: number, max: number): WarmUpTask => {
     }
   }
 
+  for (const preset of [
+    { base: 4, value: 2, answer: 0.5 },
+    { base: 9, value: 3, answer: 0.5 },
+    { base: 16, value: 4, answer: 0.5 },
+    { base: 25, value: 5, answer: 0.5 },
+    { base: 100, value: 10, answer: 0.5 },
+  ] as const) {
+    if (preset.value >= min && preset.value <= max) {
+      halfStepCandidates.push(preset)
+    }
+  }
+
+  if (max <= 10 && halfStepCandidates.length > 0) {
+    candidates.splice(0, candidates.length, ...halfStepCandidates)
+  } else {
+    candidates.push(...halfStepCandidates)
+  }
+
   if (candidates.length === 0) {
+    candidates.push({ base: 4, value: 2, answer: 0.5 })
     candidates.push({ base: 2, value: 8, answer: 3 })
     candidates.push({ base: 3, value: 27, answer: 3 })
     candidates.push({ base: 10, value: 1000, answer: 3 })

@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import type { Operation } from '../../../model/useWarmUpSession'
+import type { CanonicalOperation } from '../../../model/useWarmUpSession'
 import WarmUpTaskAndOperationsPanel from '../WarmUpTaskAndOperationsPanel.vue'
 
 const makeWrapper = () =>
@@ -8,16 +8,28 @@ const makeWrapper = () =>
     props: {
       canStartSession: true,
       operationOptions: [
-        { id: '+' as Operation, label: 'Addition' },
-        { id: '-' as Operation, label: 'Subtraction' },
-        { id: '*' as Operation, label: 'Multiplication' },
-        { id: '/' as Operation, label: 'Division' },
+        { id: '+' as CanonicalOperation, label: 'Addition' },
+        { id: '-' as CanonicalOperation, label: 'Subtraction' },
+        { id: '*' as CanonicalOperation, label: 'Multiplication' },
+        { id: '/' as CanonicalOperation, label: 'Division' },
+        { id: 'chains' as CanonicalOperation, label: 'Chains' },
+        { id: 'powers' as CanonicalOperation, label: 'Powers' },
+        { id: 'decimals' as CanonicalOperation, label: 'Decimals' },
+        { id: 'roots' as CanonicalOperation, label: 'Roots' },
+        { id: 'trigonometry' as CanonicalOperation, label: 'Trigonometry' },
+        { id: 'logarithms' as CanonicalOperation, label: 'Logarithms' },
       ],
       operations: {
         '+': true,
         '-': true,
         '*': true,
         '/': true,
+        chains: true,
+        powers: true,
+        decimals: true,
+        roots: true,
+        trigonometry: true,
+        logarithms: true,
       },
       taskMaxRange: 100,
       taskMinRange: 1,
@@ -39,6 +51,17 @@ describe('WarmUpTaskAndOperationsPanel', () => {
     expect(operationButton).toBeDefined()
     await operationButton!.trigger('click')
     expect(wrapper.emitted('toggleOperation')).toEqual([['/']])
+  })
+
+  it('renders all supported operation options', () => {
+    const wrapper = makeWrapper()
+
+    expect(wrapper.text()).toContain('Chains')
+    expect(wrapper.text()).toContain('Powers')
+    expect(wrapper.text()).toContain('Decimals')
+    expect(wrapper.text()).toContain('Roots')
+    expect(wrapper.text()).toContain('Trigonometry')
+    expect(wrapper.text()).toContain('Logarithms')
   })
 
   it('emits custom task count from input', async () => {

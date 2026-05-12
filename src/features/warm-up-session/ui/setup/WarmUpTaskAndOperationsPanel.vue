@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Operation } from '../../model/useWarmUpSession'
+import type { CanonicalOperation } from '../../model/useWarmUpSession'
 import type { OperationOption } from '../../model/useWarmUpSetup'
 
 const props = defineProps<{
   canStartSession: boolean
   operationOptions: Readonly<OperationOption[]>
-  operations: Record<Operation, boolean>
+  operations: Record<CanonicalOperation, boolean>
   taskMaxRange: number
   taskMinRange: number
   taskPresets: readonly number[]
@@ -15,7 +15,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   selectPreset: [preset: number]
   taskCountInput: [value: number]
-  toggleOperation: [operation: Operation]
+  toggleOperation: [operation: CanonicalOperation]
 }>()
 
 const onTaskCountInput = (event: Event) => {

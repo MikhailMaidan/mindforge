@@ -1,8 +1,8 @@
 import { computed, reactive } from 'vue'
-import type { Operation, WarmUpConfig } from './useWarmUpSession'
+import type { CanonicalOperation, WarmUpConfig } from './useWarmUpSession'
 
 export interface OperationOption {
-  id: Operation
+  id: CanonicalOperation
   label: string
 }
 
@@ -10,7 +10,7 @@ export interface WarmUpSetupState {
   totalTasks: number
   minNumber: number
   maxNumber: number
-  operations: Record<Operation, boolean>
+  operations: Record<CanonicalOperation, boolean>
 }
 
 const TASK_PRESETS = Array.from({ length: 20 }, (_, index) => (index + 1) * 5)
@@ -19,6 +19,12 @@ const OPERATION_OPTIONS: Readonly<OperationOption[]> = [
   { id: '-', label: 'Subtraction' },
   { id: '*', label: 'Multiplication' },
   { id: '/', label: 'Division' },
+  { id: 'chains', label: 'Chains' },
+  { id: 'powers', label: 'Powers' },
+  { id: 'decimals', label: 'Decimals' },
+  { id: 'roots', label: 'Roots' },
+  { id: 'trigonometry', label: 'Trigonometry' },
+  { id: 'logarithms', label: 'Logarithms' },
 ]
 
 const TASK_MIN_RANGE = 1
@@ -36,6 +42,12 @@ export const useWarmUpSetup = () => {
       '-': true,
       '*': true,
       '/': true,
+      chains: true,
+      powers: true,
+      decimals: true,
+      roots: true,
+      trigonometry: true,
+      logarithms: true,
     },
   })
 
@@ -77,7 +89,7 @@ export const useWarmUpSetup = () => {
     state.totalTasks = preset
   }
 
-  const toggleOperation = (operation: Operation) => {
+  const toggleOperation = (operation: CanonicalOperation) => {
     state.operations[operation] = !state.operations[operation]
   }
 
