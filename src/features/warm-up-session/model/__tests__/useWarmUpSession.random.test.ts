@@ -119,4 +119,31 @@ describe('createWarmUpTask random generation', () => {
       expect(task.left).toBe(task.right ** task.answer)
     }
   })
+
+  it('builds all newer specialty operation tasks with numeric answers', () => {
+    const operations = [
+      'vedic',
+      'percentages',
+      'estimation',
+      'modular',
+      'calendar',
+      'flash-anzan',
+    ] as const
+
+    for (const operation of operations) {
+      const config: WarmUpConfig = {
+        totalTasks: 50,
+        enabledOperations: [operation],
+        minNumber: 1,
+        maxNumber: 100,
+      }
+
+      for (let i = 0; i < 50; i += 1) {
+        const task = createWarmUpTask(config)
+        expect(task.operation).toBe(operation)
+        expect(task.expression).not.toHaveLength(0)
+        expect(Number.isFinite(task.answer)).toBe(true)
+      }
+    }
+  })
 })

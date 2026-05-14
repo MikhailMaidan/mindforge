@@ -2,12 +2,18 @@ import { normalizeOperationPool, SUPPORTED_CANONICAL_OPERATIONS } from './warmUp
 import {
   buildBinaryTask,
   buildChainsTask,
+  buildCalendarTask,
   buildDecimalsTask,
   buildDivisionTask,
+  buildEstimationTask,
+  buildFlashAnzanTask,
   buildLogarithmTask,
+  buildModularTask,
+  buildPercentagesTask,
   buildPowersTask,
   buildRootsTask,
   buildTrigonometryTask,
+  buildVedicTask,
   randomInt,
   randomItem,
 } from './warmUpTaskBuilders'
@@ -48,6 +54,13 @@ const buildTaskByOperation = (
   if (operation === 'decimals') return buildDecimalsTask(min, max)
   if (operation === 'roots') return buildRootsTask(min, max)
   if (operation === 'trigonometry') return buildTrigonometryTask(min, max)
+  if (operation === 'logarithms') return buildLogarithmTask(min, max)
+  if (operation === 'vedic') return buildVedicTask(min, max)
+  if (operation === 'percentages') return buildPercentagesTask(min, max)
+  if (operation === 'estimation') return buildEstimationTask(min, max)
+  if (operation === 'modular') return buildModularTask(min, max)
+  if (operation === 'calendar') return buildCalendarTask(min, max)
+  if (operation === 'flash-anzan') return buildFlashAnzanTask(min, max)
   return buildLogarithmTask(min, max)
 }
 

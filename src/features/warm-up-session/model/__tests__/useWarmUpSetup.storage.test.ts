@@ -42,7 +42,19 @@ describe('useWarmUpSetup storage', () => {
       totalTasks: 25,
       minNumber: 5,
       maxNumber: 500,
-      enabledOperations: ['+', '*', 'powers', 'roots', 'logarithms'],
+      enabledOperations: [
+        '+',
+        '*',
+        'powers',
+        'roots',
+        'logarithms',
+        'vedic',
+        'percentages',
+        'estimation',
+        'modular',
+        'calendar',
+        'flash-anzan',
+      ],
     })
   })
 

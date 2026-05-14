@@ -13,6 +13,12 @@ type TrainingOperation =
   | 'roots'
   | 'trigonometry'
   | 'logarithms'
+  | 'vedic'
+  | 'percentages'
+  | 'estimation'
+  | 'modular'
+  | 'calendar'
+  | 'flash-anzan'
 
 interface OperationOption {
   id: TrainingOperation
@@ -55,6 +61,12 @@ const OPERATION_OPTIONS: readonly OperationOption[] = [
   { id: 'roots', label: 'Roots' },
   { id: 'trigonometry', label: 'Trigonometry' },
   { id: 'logarithms', label: 'Logarithms' },
+  { id: 'vedic', label: 'Vedic Tricks' },
+  { id: 'percentages', label: 'Percentages' },
+  { id: 'estimation', label: 'Estimation' },
+  { id: 'modular', label: 'Modular' },
+  { id: 'calendar', label: 'Calendar' },
+  { id: 'flash-anzan', label: 'Flash Anzan' },
 ]
 
 const state = reactive<{
@@ -77,6 +89,12 @@ const state = reactive<{
     roots: true,
     trigonometry: false,
     logarithms: false,
+    vedic: false,
+    percentages: false,
+    estimation: false,
+    modular: false,
+    calendar: false,
+    'flash-anzan': false,
   },
 })
 
@@ -223,12 +241,12 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section class="rounded-xl border border-slate-300 bg-white/90 p-4 shadow-sm">
+  <section class="flex h-full min-h-0 flex-col rounded-xl border border-slate-300 bg-white/90 p-4 shadow-sm">
     <header class="mb-3 border-b border-slate-200 pb-2">
       <h3 class="m-0 text-3xl font-extrabold text-black md:text-4xl">Custom Training Setup</h3>
     </header>
 
-    <div class="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
+    <div class="grid min-h-0 flex-1 gap-4 lg:grid-cols-[1.3fr_1fr]">
       <div class="flex h-full flex-col rounded-xl border border-slate-300 bg-slate-50 p-4">
         <p class="m-0 text-lg font-semibold text-slate-900 md:text-xl">
           Choose the number of exercises
@@ -269,11 +287,11 @@ onBeforeUnmount(() => {
         <p class="mb-0 mt-4 text-lg font-semibold text-slate-900 md:text-xl">
           Choose the arithmetical operations
         </p>
-        <div class="mt-2 grid flex-1 auto-rows-fr grid-cols-1 gap-2 md:grid-cols-2">
+        <div class="mt-2 grid flex-1 auto-rows-fr grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
           <button
             v-for="option in OPERATION_OPTIONS"
             :key="option.id"
-            class="flex min-h-12 items-center gap-3 rounded-lg border px-3 py-3 text-left text-base font-medium md:text-lg"
+            class="flex min-h-11 items-center gap-2 rounded-lg border px-2.5 py-2 text-left text-sm font-medium"
             :class="
               state.operations[option.id]
                 ? 'border-blue-600 bg-blue-50 text-blue-700'

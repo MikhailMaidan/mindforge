@@ -18,6 +18,12 @@ const makeWrapper = () =>
         { id: 'roots' as CanonicalOperation, label: 'Roots' },
         { id: 'trigonometry' as CanonicalOperation, label: 'Trigonometry' },
         { id: 'logarithms' as CanonicalOperation, label: 'Logarithms' },
+        { id: 'vedic' as CanonicalOperation, label: 'Vedic Tricks' },
+        { id: 'percentages' as CanonicalOperation, label: 'Percentages' },
+        { id: 'estimation' as CanonicalOperation, label: 'Estimation' },
+        { id: 'modular' as CanonicalOperation, label: 'Modular' },
+        { id: 'calendar' as CanonicalOperation, label: 'Calendar' },
+        { id: 'flash-anzan' as CanonicalOperation, label: 'Flash Anzan' },
       ],
       operations: {
         '+': true,
@@ -30,6 +36,12 @@ const makeWrapper = () =>
         roots: true,
         trigonometry: true,
         logarithms: true,
+        vedic: true,
+        percentages: true,
+        estimation: true,
+        modular: true,
+        calendar: true,
+        'flash-anzan': true,
       },
       taskMaxRange: 100,
       taskMinRange: 1,
@@ -62,6 +74,12 @@ describe('WarmUpTaskAndOperationsPanel', () => {
     expect(wrapper.text()).toContain('Roots')
     expect(wrapper.text()).toContain('Trigonometry')
     expect(wrapper.text()).toContain('Logarithms')
+    expect(wrapper.text()).toContain('Vedic Tricks')
+    expect(wrapper.text()).toContain('Percentages')
+    expect(wrapper.text()).toContain('Estimation')
+    expect(wrapper.text()).toContain('Modular')
+    expect(wrapper.text()).toContain('Calendar')
+    expect(wrapper.text()).toContain('Flash Anzan')
   })
 
   it('emits custom task count from input', async () => {

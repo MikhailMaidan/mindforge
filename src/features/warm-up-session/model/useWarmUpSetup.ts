@@ -25,6 +25,12 @@ const OPERATION_OPTIONS: Readonly<OperationOption[]> = [
   { id: 'roots', label: 'Roots' },
   { id: 'trigonometry', label: 'Trigonometry' },
   { id: 'logarithms', label: 'Logarithms' },
+  { id: 'vedic', label: 'Vedic Tricks' },
+  { id: 'percentages', label: 'Percentages' },
+  { id: 'estimation', label: 'Estimation' },
+  { id: 'modular', label: 'Modular' },
+  { id: 'calendar', label: 'Calendar' },
+  { id: 'flash-anzan', label: 'Flash Anzan' },
 ]
 
 const TASK_MIN_RANGE = 1
@@ -48,6 +54,12 @@ const DEFAULT_SETUP_STATE: WarmUpSetupState = {
     roots: true,
     trigonometry: true,
     logarithms: true,
+    vedic: true,
+    percentages: true,
+    estimation: true,
+    modular: true,
+    calendar: true,
+    'flash-anzan': true,
   },
 }
 

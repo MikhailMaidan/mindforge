@@ -58,11 +58,11 @@ const onTaskCountInput = (event: Event) => {
     />
 
     <p class="mb-0 mt-4 text-lg font-semibold text-slate-900 md:text-xl">Choose the arithmetical operations</p>
-    <div class="mt-2 grid flex-1 auto-rows-fr grid-cols-1 gap-2 md:grid-cols-2">
+    <div class="mt-2 grid flex-1 auto-rows-fr grid-cols-1 gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
       <button
         v-for="option in props.operationOptions"
         :key="option.id"
-        class="flex h-full min-h-12 items-center justify-center rounded-lg border px-3 py-3 text-center text-[clamp(1rem,2vw,1.5rem)] font-medium"
+        class="flex h-full min-h-9 items-center justify-center rounded-lg border px-2 py-1.5 text-center text-[clamp(0.8125rem,1.3vw,1rem)] font-medium"
         :class="
           props.operations[option.id]
             ? 'border-blue-600 bg-blue-50 text-blue-700'

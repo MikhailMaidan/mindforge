@@ -1,6 +1,7 @@
 import type { Operation, WarmUpTask } from './warmUpSession.types'
 
 const MAX_POWERS_ANSWER = 1_000_000
+const WEEKDAYS_IN_A_WEEK = 7
 
 interface TrigonometryPreset {
   fn: 'sin' | 'cos' | 'tan'
@@ -259,5 +260,186 @@ export const buildLogarithmTask = (min: number, max: number): WarmUpTask => {
     operation: 'logarithms',
     expression: `log_${selected.base}(${selected.value})`,
     answer: selected.answer,
+  }
+}
+
+export const buildVedicTask = (min: number, max: number): WarmUpTask => {
+  const trick = randomItem(['multiplyBy11', 'squareEndingIn5', 'twoDigitProduct'] as const)
+
+  if (trick === 'multiplyBy11') {
+    const left = min <= 99 && max >= 10 ? randomInt(Math.max(10, min), Math.min(99, max)) : randomInt(10, 99)
+    return {
+      left,
+      right: 11,
+      operation: 'vedic',
+      expression: `${left} x 11`,
+      answer: left * 11,
+    }
+  }
+
+  if (trick === 'squareEndingIn5') {
+    const tens = randomInt(1, 12)
+    const value = tens * 10 + 5
+    return {
+      left: value,
+      right: 2,
+      operation: 'vedic',
+      expression: `${value}^2`,
+      answer: value ** 2,
+    }
+  }
+
+  const left = randomInt(10, 99)
+  const right = randomInt(10, 99)
+  return {
+    left,
+    right,
+    operation: 'vedic',
+    expression: `${left} x ${right}`,
+    answer: left * right,
+  }
+}
+
+export const buildPercentagesTask = (min: number, max: number): WarmUpTask => {
+  const mode = randomItem(['part', 'original', 'discount', 'conversion'] as const)
+  const percent = randomItem([5, 10, 12.5, 15, 20, 25, 30, 40, 50, 75] as const)
+  const base = min <= 1000 && max >= 20 ? randomInt(Math.max(20, min), Math.min(1000, max)) : randomInt(20, 1000)
+
+  if (mode === 'original') {
+    const original = Math.round(base / 5) * 5
+    const discounted = original * (1 - percent / 100)
+    return {
+      left: discounted,
+      right: percent,
+      operation: 'percentages',
+      expression: `${discounted} after ${percent}% off`,
+      answer: original,
+    }
+  }
+
+  if (mode === 'discount') {
+    const price = Math.round(base / 5) * 5
+    return {
+      left: price,
+      right: percent,
+      operation: 'percentages',
+      expression: `${percent}% off ${price}`,
+      answer: Number((price * (1 - percent / 100)).toFixed(2)),
+    }
+  }
+
+  if (mode === 'conversion') {
+    return {
+      left: percent,
+      right: 100,
+      operation: 'percentages',
+      expression: `${percent}% as decimal`,
+      answer: percent / 100,
+    }
+  }
+
+  const whole = Math.round(base / 5) * 5
+  return {
+    left: whole,
+    right: percent,
+    operation: 'percentages',
+    expression: `${percent}% of ${whole}`,
+    answer: Number((whole * (percent / 100)).toFixed(2)),
+  }
+}
+
+export const buildEstimationTask = (min: number, max: number): WarmUpTask => {
+  const mode = randomItem(['sum', 'product'] as const)
+  const left = randomInt(min, max)
+  const right = randomInt(min, max)
+
+  if (mode === 'sum') {
+    const answer = Math.round((left + right) / 10) * 10
+    return {
+      left,
+      right,
+      operation: 'estimation',
+      expression: `Round ${left} + ${right} to nearest 10`,
+      answer,
+    }
+  }
+
+  const answer = Math.round((left * right) / 100) * 100
+  return {
+    left,
+    right,
+    operation: 'estimation',
+    expression: `Round ${left} x ${right} to nearest 100`,
+    answer,
+  }
+}
+
+export const buildModularTask = (min: number, max: number): WarmUpTask => {
+  const modulus = randomItem([3, 4, 5, 7, 9, 10, 11, 12] as const)
+  const mode = randomItem(['sum', 'product', 'lastDigit'] as const)
+  const left = randomInt(min, max)
+  const right = randomInt(min, max)
+
+  if (mode === 'lastDigit') {
+    const exponent = randomInt(2, 5)
+    const lastDigit = Array.from({ length: exponent }, () => left % 10).reduce(
+      (total, digit) => (total * digit) % 10,
+      1,
+    )
+
+    return {
+      left,
+      right: 10,
+      operation: 'modular',
+      expression: `Last digit of ${left}^${exponent}`,
+      answer: lastDigit,
+    }
+  }
+
+  const rawAnswer = mode === 'sum' ? left + right : left * right
+  return {
+    left,
+    right: modulus,
+    operation: 'modular',
+    expression: `(${left} ${mode === 'sum' ? '+' : 'x'} ${right}) mod ${modulus}`,
+    answer: ((rawAnswer % modulus) + modulus) % modulus,
+  }
+}
+
+export const buildCalendarTask = (min: number, max: number): WarmUpTask => {
+  const minYear = Math.min(2099, Math.max(1900, min))
+  const maxYear = Math.min(2099, Math.max(minYear, max))
+  const year = randomInt(minYear, maxYear)
+  const month = randomInt(1, 12)
+  const day = randomInt(1, new Date(year, month, 0).getDate())
+  const date = new Date(year, month - 1, day)
+  const isoWeekday = date.getDay() === 0 ? WEEKDAYS_IN_A_WEEK : date.getDay()
+
+  return {
+    left: year,
+    right: month,
+    operation: 'calendar',
+    expression: `Weekday ${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')} (Mon=1 Sun=7)`,
+    answer: isoWeekday,
+  }
+}
+
+export const buildFlashAnzanTask = (min: number, max: number): WarmUpTask => {
+  const length = randomInt(4, 7)
+  const terms = Array.from({ length }, () => randomInt(min, max))
+  const operations = Array.from({ length: length - 1 }, () => randomItem(['+', '-'] as const))
+  const expression = terms
+    .slice(1)
+    .reduce((text, term, index) => `${text} ${operations[index]} ${term}`, String(terms[0]))
+  const answer = terms
+    .slice(1)
+    .reduce((total, term, index) => (operations[index] === '+' ? total + term : total - term), terms[0] ?? 0)
+
+  return {
+    left: terms[0] ?? 0,
+    right: terms[1] ?? 0,
+    operation: 'flash-anzan',
+    expression,
+    answer,
   }
 }

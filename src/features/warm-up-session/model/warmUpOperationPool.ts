@@ -15,6 +15,12 @@ export const SUPPORTED_CANONICAL_OPERATIONS: readonly CanonicalOperation[] = [
   'roots',
   'trigonometry',
   'logarithms',
+  'vedic',
+  'percentages',
+  'estimation',
+  'modular',
+  'calendar',
+  'flash-anzan',
 ] as const
 
 const canonicalizeOperation = (operation: SessionOperation): CanonicalOperation | null => {
@@ -28,6 +34,12 @@ const canonicalizeOperation = (operation: SessionOperation): CanonicalOperation 
   if (operation === 'roots') return 'roots'
   if (operation === 'trigonometry') return 'trigonometry'
   if (operation === 'logarithms') return 'logarithms'
+  if (operation === 'vedic') return 'vedic'
+  if (operation === 'percentages') return 'percentages'
+  if (operation === 'estimation') return 'estimation'
+  if (operation === 'modular') return 'modular'
+  if (operation === 'calendar') return 'calendar'
+  if (operation === 'flash-anzan') return 'flash-anzan'
   return null
 }
 

@@ -10,6 +10,12 @@ export type AdvancedOperation =
   | 'roots'
   | 'trigonometry'
   | 'logarithms'
+  | 'vedic'
+  | 'percentages'
+  | 'estimation'
+  | 'modular'
+  | 'calendar'
+  | 'flash-anzan'
   | 'degrees'
   | 'fractionals'
 export type SessionOperation = Operation | AdvancedOperation
@@ -21,6 +27,12 @@ export type CanonicalOperation =
   | 'roots'
   | 'trigonometry'
   | 'logarithms'
+  | 'vedic'
+  | 'percentages'
+  | 'estimation'
+  | 'modular'
+  | 'calendar'
+  | 'flash-anzan'
 export type TaskResult = 'pending' | 'correct' | 'wrong'
 
 export interface WarmUpTask {
